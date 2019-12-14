@@ -6,7 +6,7 @@ public class AIView : MonoBehaviour
 {
 
     public Transform target;
-    public float viewAngle = 20.0f;
+    public float viewAngle = 80.0f;
 
     private UnityEngine.AI.NavMeshAgent agent;
     void Start()
@@ -33,6 +33,7 @@ public class AIView : MonoBehaviour
 
     void Move()
     {
+        Debug.Log("MOVING");
         agent.destination = target.position;
     }
 }
