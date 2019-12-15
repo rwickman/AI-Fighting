@@ -58,15 +58,13 @@ public class Sword : MonoBehaviour
            animElapsedTime < hitAnimTime && 
            !m_coll.transform.IsChildOf(other.transform) &&
            !objectsHitAlready.Contains(other.GetInstanceID())) {
-            
+            Debug.Log("HIT");
+            otherHealth.Hurt(hitDamage);
             objectsHitAlready.Add(other.GetInstanceID());
-
             Vector3 dir = other.transform.position - transform.position;
-            Rigidbody otherRb = other.gameObject.GetComponent<Rigidbody>();
-            other.gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
-            otherRb.isKinematic = false;
-            otherRb.AddForce(dir.normalized * hitForce,  ForceMode.Impulse);
-
+            //dir += Vector3.up * 0.9f;
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+            enemy.AddForce(dir.normalized * hitForce,  ForceMode.Impulse);
         }
     }
 
