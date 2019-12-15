@@ -853,10 +853,5 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 838464510}
-    - target: {fileID: 7490691283668573513, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: viewAngle
-      value: 85
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa2f456835540a9687ea9b4eed547be, type: 3}

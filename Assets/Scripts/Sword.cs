@@ -63,8 +63,15 @@ public class Sword : MonoBehaviour
             objectsHitAlready.Add(other.GetInstanceID());
             Vector3 dir = other.transform.position - transform.position;
             //dir += Vector3.up * 0.9f;
-            Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.AddForce(dir.normalized * hitForce,  ForceMode.Impulse);
+            if (other.gameObject.tag != "Player")
+            {
+                Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                enemy.AddForce(dir.normalized * hitForce, ForceMode.Impulse);
+            }
+            else
+            {
+                other.gameObject.GetComponent<Rigidbody>().AddForce(dir.normalized * hitForce, ForceMode.Impulse);
+            }
         }
     }
 
