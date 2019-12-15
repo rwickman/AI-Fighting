@@ -47,4 +47,6 @@ public class Enemy : MonoBehaviour
         hitTime = Time.time;
         view.isHurt = true;
     }
+
+
 }
