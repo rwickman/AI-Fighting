@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
         {
             rigidbody.velocity = Vector3.Slerp(rigidbody.velocity, Vector3.zero, stoppingLerpTerm * Time.deltaTime);
         }
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.localEulerAngles.y, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
         rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
     }
 
