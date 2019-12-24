@@ -25,11 +25,12 @@ public class Enemy : MonoBehaviour
     }
 
     void Update()
-    { 
-        if(rb.velocity.magnitude <= 1.0f && Time.time >=  hitTime + hitDelay)
+    {
+        
+        if (rb.velocity.magnitude <= 1.0f && Time.time >=  hitTime + hitDelay)
         {
             rb.isKinematic = true;
-            //agent.enabled = true;
+            agent.enabled = true;
             view.isHurt = false;
         }
 
@@ -39,11 +40,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void AddForce(Vector3 force, ForceMode mode = ForceMode.Force)
+    public void AddForce(Vector3 force, ForceMode mode)
     {
         rb.isKinematic = false;
-        //agent.enabled = false;
+        agent.enabled = false;
         rb.AddForce(force, mode);
+        Debug.Log(force);
         hitTime = Time.time;
         view.isHurt = true;
     }

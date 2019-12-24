@@ -55,8 +55,8 @@ public class FrameCapture : MonoBehaviour
         }
         Frame frame = new Frame();
         frame.pixels = pixels;
-        string jsonStr = JsonUtility.ToJson(frame);
-        Debug.Log(jsonStr);
+        //string jsonStr = JsonUtility.ToJson(frame);
+        //Debug.Log(jsonStr);
         isDoneCapturingFrame = true;
     }
 }

@@ -49,7 +49,7 @@ public class AIView : MonoBehaviour
 
     void Move()
     {
-        Debug.Log("MOVING");
+        //Debug.Log("MOVING");
         agent.destination = target.position;
         RotateTowards(target);
     }
@@ -58,7 +58,7 @@ public class AIView : MonoBehaviour
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        Debug.Log(Time.deltaTime * rotationSpeed);
+        //Debug.Log(Time.deltaTime * rotationSpeed);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 

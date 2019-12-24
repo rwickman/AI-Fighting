@@ -63,15 +63,22 @@ public class Sword : MonoBehaviour
             objectsHitAlready.Add(other.GetInstanceID());
             
             Vector3 dir = other.transform.position - transform.position;
-            //dir += Vector3.up * 0.9f;
+            dir.y = 0f;
+            dir = dir.normalized;
+            dir += Vector3.up;
+            Debug.Log(dir * hitForce);
             if (other.gameObject.tag != "Player")
             {
+                Debug.Log("ADDING FORCE!");
+
+                Debug.DrawLine(transform.position, dir * hitForce, Color.white, 10f);
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
-                enemy.AddForce(dir.normalized * hitForce, ForceMode.Impulse);
+                enemy.AddForce(dir * hitForce, ForceMode.Impulse);
             }
             else
             {
-                other.gameObject.GetComponent<Rigidbody>().AddForce(dir.normalized * hitForce, ForceMode.Impulse);
+                other.gameObject.GetComponent<Rigidbody>().AddForce(dir * hitForce, ForceMode.Impulse);
+                Debug.DrawLine(transform.position, dir * hitForce, Color.red, 10f);
             }
         }
     }
