@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
         pitch -= speedV * Input.GetAxis("Mouse Y");       
         //the rotation range
         pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
-        Debug.Log("ptich: " + pitch);
+        //Debug.Log("ptich: " + pitch);
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 }

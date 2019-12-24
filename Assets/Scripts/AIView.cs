@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIView : MonoBehaviour
 {
@@ -9,28 +10,26 @@ public class AIView : MonoBehaviour
     public float viewAngle = 80.0f;
     public float rotationSpeed = 5f;
     public float maxViewDistance = 20f;
+    public Health agentHealth;
     public bool isHurt;
-
 
     private float distanceToTarget;
     private bool islookingAtTarget;
     private float angleToTarget;
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
 
 
     void Start()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
+        agentHealth = GetComponent<Health>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isHurt){
-            Look();
-           
-        }
+        Look();
     }
 
     void Look()
@@ -40,7 +39,8 @@ public class AIView : MonoBehaviour
         angleToTarget = Vector3.Angle(targetDir, transform.forward);
         //Have it rotate toward player if within stopping distance
         //Debug.Log("Distance: " + distanceToTarget);
-        if (angleToTarget < viewAngle && distanceToTarget <= maxViewDistance)
+        Debug.Log(agentHealth.hurtTime < agentHealth.alertTime);
+        if (agentHealth.hurtTime < agentHealth.alertTime || angleToTarget < viewAngle && distanceToTarget <= maxViewDistance)
         {
             Move();
         }
@@ -50,7 +50,11 @@ public class AIView : MonoBehaviour
     void Move()
     {
         //Debug.Log("MOVING");
-        agent.destination = target.position;
+        if (agent.isActiveAndEnabled)
+        {
+            agent.destination = target.position;
+        }
+        
         RotateTowards(target);
     }
 

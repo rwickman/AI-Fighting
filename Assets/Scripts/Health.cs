@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-
-    
     public int health = 10;
     //public Player player;
     public float deathTime = 0.1f;
     
+    // Amount of time alert
+    public float alertTime = 2f;
+    // Time since last hurt
+    public float hurtTime = 10f;
+
+    private void Update()
+    {
+        if (hurtTime < alertTime)
+        {
+            hurtTime += Time.deltaTime;
+        }
+    }
+
     public void Hurt(int hitPoints) {
+        hurtTime = 0f;
         health -= hitPoints;
         print(name + " got hurt!");
         if (health <= 0) {

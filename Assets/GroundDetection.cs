@@ -7,7 +7,7 @@ public class GroundDetection : MonoBehaviour
     public bool isGrounded = true;
 
     public float minVelocityY = 0.00005f;
-    public float airTime = 0f;
+    //public float airTime = 0f;
 
     private Rigidbody rigidbody;
     void Start()
@@ -17,7 +17,7 @@ public class GroundDetection : MonoBehaviour
 
     private void Update()
     {
-        airTime += Time.deltaTime;
+        //airTime += Time.deltaTime;
        // Debug.Log(rigidbody.velocity.y);
     }
 
@@ -33,12 +33,12 @@ public class GroundDetection : MonoBehaviour
     void OnTriggerExit(Collider col)
     {   
         isGrounded = false;
-        airTime = 0f;
+        //airTime = 0f;
      }
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log("AIR TIME: " + airTime);
+        //Debug.Log("AIR TIME: " + airTime);
         //Debug.Log("ENTER: " + col.gameObject.name);
         if (Mathf.Abs(rigidbody.velocity.y) <= minVelocityY)
         {

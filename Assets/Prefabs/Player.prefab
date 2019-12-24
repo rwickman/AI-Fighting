@@ -100,8 +100,8 @@ MonoBehaviour:
   speedH: 2
   speedV: 2
   camFollowPlayerLerpTerm: 20.48
-  pitchMin: -90
-  pitchMax: 90
+  pitchMin: -80
+  pitchMax: 80
 --- !u!1 &1875357519
 GameObject:
   m_ObjectHideFlags: 0

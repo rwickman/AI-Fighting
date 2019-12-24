@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public float hitDistance = 2f;
     public float hitAngle = 20f;
 
+
     private float hitTime;
     private Rigidbody rb;
     private NavMeshAgent agent;
@@ -26,7 +27,6 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        
         if (rb.velocity.magnitude <= 1.0f && Time.time >=  hitTime + hitDelay)
         {
             rb.isKinematic = true;

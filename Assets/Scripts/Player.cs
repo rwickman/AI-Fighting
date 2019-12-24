@@ -81,7 +81,6 @@ public class Player : MonoBehaviour
         {
             transform.Translate(moveDir * speed * Time.deltaTime);
         }
-        
         //rigidbody.velocity = new Vector3(hMove, 0f, vMove) * speed * Time.deltaTime;
         //rigidbody.AddRelativeForce(new Vector3(horizontalMove * dirMoveFactor, 0f, verticalMove * dirMoveFactor).normalized * speed * Time.deltaTime);
     }
