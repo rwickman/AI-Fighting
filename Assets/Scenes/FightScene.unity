@@ -588,7 +588,12 @@ PrefabInstance:
     - target: {fileID: 4869848098760665277, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
       propertyPath: jumpForce
-      value: 150
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098760665277, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: jumpDelay
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4869848099371396314, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
@@ -598,6 +603,11 @@ PrefabInstance:
     - target: {fileID: 4869848099371396314, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
       propertyPath: hitDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098760665278, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -638,6 +648,7 @@ MonoBehaviour:
   speed: 2
   isMoveable: 1
   jumpForce: 3
+  jumpDelay: 1
 --- !u!135 &572865136
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1207,6 +1218,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 838464510}
+    - target: {fileID: 7490691283668573513, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7490691283668573516, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1266,9 +1282,18 @@ PrefabInstance:
       propertyPath: hitDelay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1639525824, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 305427680, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: hitForce
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573514, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa2f456835540a9687ea9b4eed547be, type: 3}

@@ -13,6 +13,9 @@ public class CameraController : MonoBehaviour
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     public float camFollowPlayerLerpTerm = 6.4f;
+
+    public float pitchMin = -80f;
+    public float pitchMax = 80f;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +32,8 @@ public class CameraController : MonoBehaviour
         yaw += speedH * Input.GetAxis("Mouse X");
         pitch -= speedV * Input.GetAxis("Mouse Y");       
         //the rotation range
-        pitch = Mathf.Clamp(pitch, -60f, 55f);
-
+        pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
+        Debug.Log("ptich: " + pitch);
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 }

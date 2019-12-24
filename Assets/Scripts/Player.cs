@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     //public float maxSpeed = 5;
     //public float stoppingLerpTerm = 0.01f;
     //public float dirMoveFactor = 1f;
-    public float jumpForce = 3f;
+    public float jumpForce = 250f;
+    public float jumpDelay = 1f;
 
+    private float jumpElapsedTime = 0f;
+    
     private float minVelocityMag = 0.5f;
     private Rigidbody rigidbody;
     private Sword sword;
@@ -28,7 +31,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        if (jumpElapsedTime < jumpDelay)
+        {
+            jumpElapsedTime += Time.deltaTime;
+        }
+           
         if (Input.GetButton("Fire1"))
         {
             sword.Attack();
@@ -63,8 +70,9 @@ public class Player : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(hMove, 0f, vMove).normalized;
-        if (isJumping)
+        if (isJumping && jumpElapsedTime >= jumpDelay)
         {
+            jumpElapsedTime = 0f;
             Debug.Log("Jumpping");
             moveDir += Vector3.up;
             rigidbody.AddRelativeForce(moveDir * jumpForce * Time.deltaTime, ForceMode.Impulse);
