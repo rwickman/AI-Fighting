@@ -60,14 +60,16 @@ public class Player : MonoBehaviour
             vMove = verticalMove > 0 ? 1 : -1;
         }
 
+        Vector3 moveDir = new Vector3(hMove, 0f, vMove).normalized;
         if (isJumping)
         {
             Debug.Log("Jumpping");
-            rigidbody.AddRelativeForce(new Vector3(hMove, 1f, vMove) * jumpForce * Time.deltaTime, ForceMode.Impulse);
+            moveDir += Vector3.up;
+            rigidbody.AddRelativeForce(moveDir * jumpForce * Time.deltaTime, ForceMode.Impulse);
         }
         else
         {
-            transform.Translate(new Vector3(hMove, 0f, vMove) * speed * Time.deltaTime);
+            transform.Translate(moveDir * speed * Time.deltaTime);
         }
         
         //rigidbody.velocity = new Vector3(hMove, 0f, vMove) * speed * Time.deltaTime;
