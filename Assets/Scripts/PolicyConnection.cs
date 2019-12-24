@@ -21,17 +21,11 @@ public class PolicyConnection : MonoBehaviour
         public byte[] buffer;
     }
 
-    public string unixSocket = "/home/ryan/code/Unity/ai_controller";
+    public string unixSocket = "/home/ryan/code/Unity/AI Fighting/Assets/Scripts/python/ai_controller";
 
     private Socket client;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartConnection();
-    }
-
-    private void StartConnection()
+    private const int headerLength = 8;
+    public void StartConnection()
     {
         client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
         var unixEP = new UnixEndPoint(unixSocket);
@@ -46,7 +40,7 @@ public class PolicyConnection : MonoBehaviour
         try
         {
             //Debug.Log("Socket connected to " + client.RemoteEndPoint.ToString());
-            SendState();
+            //SendState();
         }
         catch (Exception e)
         {
@@ -54,10 +48,16 @@ public class PolicyConnection : MonoBehaviour
         }
     }
 
-    private void SendState()
+    public void SendState(string jsonStr)
     {
-        string fakeStateData = "Eventually this will contain state information";
-        byte[] byteData = Encoding.ASCII.GetBytes(fakeStateData);
+        //string fakeStateData = "Eventually this will contain state information";
+        Debug.Log(jsonStr);
+        //byte[] byteData = Encoding.ASCII.GetBytes(jsonStr);
+        byte[] byteData = new byte[headerLength + Encoding.ASCII.GetByteCount(jsonStr)];
+        Encoding.ASCII.GetBytes(jsonStr.Length.ToString()).CopyTo(byteData, 0);
+        Encoding.ASCII.GetBytes(jsonStr).CopyTo(byteData, headerLength);
+
+        Debug.Log("BYTE LENGTH: " + byteData.Length);
         client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendStateCallback), null);
     }
 

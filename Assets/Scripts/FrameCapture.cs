@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 
+
 public class FrameCapture : MonoBehaviour
 {
     // Only get a frame every 4 frames
@@ -11,11 +12,18 @@ public class FrameCapture : MonoBehaviour
     private Camera cam;
     private int lastCapture = 0;
     private bool isDoneCapturingFrame = true;
+    private PolicyConnection policy_con;
+
+    void Awake()
+    {  
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         cam = GetComponent<Camera>();
+        policy_con = GetComponent<PolicyConnection>();
+        policy_con.StartConnection();
     }
 
     void OnPostRender()
@@ -42,20 +50,9 @@ public class FrameCapture : MonoBehaviour
 
     void CreateFrame(Color32[] framePixels)
     {
-
-        Frame curFrame = new Frame();
-        Pixel[] pixels = new Pixel[framePixels.Length];
-        for (int i = 0; i < framePixels.Length; i++)
-        {
-            Color32 pixelColor = framePixels[i];
-            Pixel pixel = new Pixel();
-            pixel.rgb = new int[] { pixelColor.r, pixelColor.g, pixelColor.b };
-            pixels[i] = pixel;
-
-        }
-        Frame frame = new Frame();
-        frame.pixels = pixels;
-        //string jsonStr = JsonUtility.ToJson(frame);
+        string jsonStr = JsonSerializer.SerializeFrame(framePixels);
+        Debug.Log(jsonStr);
+        policy_con.SendState(jsonStr);
         //Debug.Log(jsonStr);
         isDoneCapturingFrame = true;
     }

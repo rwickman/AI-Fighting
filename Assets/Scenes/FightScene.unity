@@ -799,6 +799,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 91.9, y: -30, z: 0}
+--- !u!1 &739094650 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2034182137, guid: 68602d550d8d5238fa24117460705ad5,
+    type: 3}
+  m_PrefabInstance: {fileID: 547111905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &739094655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739094650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc81b9e0889c2d59b1b33f23c2eaa0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unixSocket: /home/ryan/code/Unity/AI Fighting/Assets/Scripts/python
 --- !u!4 &838464510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,

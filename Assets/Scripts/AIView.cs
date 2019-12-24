@@ -39,7 +39,7 @@ public class AIView : MonoBehaviour
         angleToTarget = Vector3.Angle(targetDir, transform.forward);
         //Have it rotate toward player if within stopping distance
         //Debug.Log("Distance: " + distanceToTarget);
-        Debug.Log(agentHealth.hurtTime < agentHealth.alertTime);
+        //Debug.Log(agentHealth.hurtTime < agentHealth.alertTime);
         if (agentHealth.hurtTime < agentHealth.alertTime || angleToTarget < viewAngle && distanceToTarget <= maxViewDistance)
         {
             Move();

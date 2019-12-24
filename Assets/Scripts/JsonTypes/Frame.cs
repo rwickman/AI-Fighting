@@ -3,5 +3,5 @@
 [Serializable]
 public class Frame
 {
-    public Pixel[] pixels;
+    public int[,] pixels;
 }
