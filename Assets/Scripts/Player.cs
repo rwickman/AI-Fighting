@@ -12,21 +12,23 @@ public class Player : MonoBehaviour
     //public float dirMoveFactor = 1f;
     public float jumpForce = 3f;
 
-    private bool isGrounded = true;
     private float minVelocityMag = 0.5f;
     private Rigidbody rigidbody;
     private Sword sword;
+    private GroundDetection groundDetection;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         sword = GetComponentInChildren<Sword>();
+        groundDetection = transform.Find("Feet").GetComponent<GroundDetection>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+
         if (Input.GetButton("Fire1"))
         {
             sword.Attack();
@@ -35,7 +37,7 @@ public class Player : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
         bool isJumping = Input.GetKey(KeyCode.Space);
 
-        if ((h != 0 || v != 0 || isJumping) && isMoveable && isGrounded)
+        if ((h != 0 || v != 0 || isJumping) && isMoveable && groundDetection.isGrounded)
         {
             Move(h, v, isJumping);
         }
@@ -76,30 +78,5 @@ public class Player : MonoBehaviour
         //rigidbody.AddRelativeForce(new Vector3(horizontalMove * dirMoveFactor, 0f, verticalMove * dirMoveFactor).normalized * speed * Time.deltaTime);
     }
 
-    void OnCollisionStay(Collision col)
-    {
-        if (col.gameObject.tag == "Ground")
-        {
-            isGrounded = true;
-        }
 
-
-    }
-
-    private void OnCollisionExit(Collision col)
-    {
-        if (col.gameObject.tag == "Ground")
-        {
-            isGrounded = false;
-        }
-    }
-
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.tag == "Ground" && isGrounded == false)
-        {
-            isGrounded = true;
-        }
-
-    }
 }
