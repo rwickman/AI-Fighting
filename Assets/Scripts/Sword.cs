@@ -61,6 +61,7 @@ public class Sword : MonoBehaviour
             Debug.Log("HIT");
             otherHealth.Hurt(hitDamage);
             objectsHitAlready.Add(other.GetInstanceID());
+            
             Vector3 dir = other.transform.position - transform.position;
             //dir += Vector3.up * 0.9f;
             if (other.gameObject.tag != "Player")
