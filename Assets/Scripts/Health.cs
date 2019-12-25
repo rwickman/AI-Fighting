@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Health : MonoBehaviour
 {
     public int health = 10;
+    
     //public Player player;
     public float deathTime = 0.1f;
     
@@ -13,7 +15,14 @@ public class Health : MonoBehaviour
     public float alertTime = 2f;
     // Time since last hurt
     public float hurtTime = 10f;
+    private int startingHealth;
+    private Slider healthSlider;
 
+    void Start()
+    {
+        startingHealth = health;
+        healthSlider = GetComponentInChildren<Slider>();
+    }
     private void Update()
     {
         if (hurtTime < alertTime)
@@ -26,6 +35,7 @@ public class Health : MonoBehaviour
         // Returns if death
         hurtTime = 0f;
         health -= hitPoints;
+        healthSlider.value = (float)health / (float)startingHealth;
         print(name + " got hurt!");
         if (health <= 0) {
             StartCoroutine("Death");

@@ -99,5 +99,4 @@ public class PolicyConnection : MonoBehaviour
             Debug.LogError("ERROR OCCURRED IN RECEIVING ACK!");
         }
     }
-
 }
