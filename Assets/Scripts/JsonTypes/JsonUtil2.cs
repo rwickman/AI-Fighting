@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Text;
 
-public static class JsonSerializer
+public static class JsonUtil2
 {
     public static string SerializeFrame(Color32[] framePixels)
     {

@@ -46,7 +46,7 @@ public class FrameCapture : MonoBehaviour
 
     void CreateFrame(Color32[] framePixels)
     {
-        string jsonStr = JsonSerializer.SerializeFrame(framePixels);
+        string jsonStr = JsonUtil2.SerializeFrame(framePixels);
         Debug.Log(jsonStr);
         policy_con.SendState(jsonStr);
     }
