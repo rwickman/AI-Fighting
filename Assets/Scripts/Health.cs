@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Health : MonoBehaviour
 {
     public int health = 10;
@@ -21,13 +22,16 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Hurt(int hitPoints) {
+    public bool Hurt(int hitPoints) {
+        // Returns if death
         hurtTime = 0f;
         health -= hitPoints;
         print(name + " got hurt!");
         if (health <= 0) {
             StartCoroutine("Death");
+            return true;
         }
+        return false;
     }
 
     IEnumerator Death() {

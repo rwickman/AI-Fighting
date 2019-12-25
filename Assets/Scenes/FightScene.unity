@@ -580,18 +580,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2034182142, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
-      propertyPath: m_AllowMSAA
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034182142, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
-      propertyPath: m_HDR
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034182139, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
-      propertyPath: skipCaptureRate
-      value: 4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
 --- !u!1 &572865134
@@ -720,6 +708,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &580948086 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
+    type: 3}
+  m_PrefabInstance: {fileID: 547111905}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,25 +805,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 91.9, y: -30, z: 0}
---- !u!1 &739094650 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2034182137, guid: 68602d550d8d5238fa24117460705ad5,
-    type: 3}
-  m_PrefabInstance: {fileID: 547111905}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &739094655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739094650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acc81b9e0889c2d59b1b33f23c2eaa0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unixSocket: /home/ryan/code/Unity/AI Fighting/Assets/Scripts/python/ai_controller
 --- !u!4 &838464510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,
@@ -846,9 +821,10 @@ GameObject:
   m_Component:
   - component: {fileID: 990593206}
   - component: {fileID: 990593205}
+  - component: {fileID: 990593207}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -879,6 +855,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990593207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990593204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 580948086}
+  numEpisodes: 0
+  enemyTag: Enemy
 --- !u!1 &1167871980
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,6 +1203,11 @@ PrefabInstance:
     - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7490691283668573513, guid: efa2f456835540a9687ea9b4eed547be,

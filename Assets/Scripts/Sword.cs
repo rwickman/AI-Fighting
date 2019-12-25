@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Sword : MonoBehaviour
 {
     public string swordAnimName = "SwordAttack";
@@ -15,12 +16,14 @@ public class Sword : MonoBehaviour
     private float hitAnimTime;
     private HashSet<int> objectsHitAlready = new HashSet<int>();
 
+    private Score score;
+
     // Start is called before the first frame update
     void Start()
     {
-        m_anim = gameObject.GetComponent<Animator>();
-        m_coll = gameObject.GetComponent<Collider>();
-
+        m_anim = GetComponent<Animator>();
+        m_coll = GetComponent<Collider>();
+        score = GetComponentInParent<Score>();
         RuntimeAnimatorController ac = m_anim.runtimeAnimatorController;
         for (int i = 0; i < ac.animationClips.Length; i++) {
             if (ac.animationClips[i].name == swordAnimName) {
@@ -51,26 +54,24 @@ public class Sword : MonoBehaviour
 
 
     private void OnTriggerStay(Collider other) {
-         print("TRIGGERING");
         Health otherHealth = other.gameObject.GetComponent<Health>();
         
         if(otherHealth != null && 
            animElapsedTime < hitAnimTime && 
            !m_coll.transform.IsChildOf(other.transform) &&
            !objectsHitAlready.Contains(other.GetInstanceID())) {
-            Debug.Log("HIT");
-            otherHealth.Hurt(hitDamage);
+            if (otherHealth.Hurt(hitDamage))
+            {
+                score.AddPoints(other.gameObject.GetComponent<Score>().pointsWorth);
+            }
             objectsHitAlready.Add(other.GetInstanceID());
             
             Vector3 dir = other.transform.position - transform.position;
             dir.y = 0f;
             dir = dir.normalized;
             dir += Vector3.up;
-            Debug.Log(dir * hitForce);
             if (other.gameObject.tag != "Player")
             {
-                Debug.Log("ADDING FORCE!");
-
                 Debug.DrawLine(transform.position, dir * hitForce, Color.white, 10f);
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 enemy.AddForce(dir * hitForce, ForceMode.Impulse);
@@ -82,5 +83,4 @@ public class Sword : MonoBehaviour
             }
         }
     }
-
 }
