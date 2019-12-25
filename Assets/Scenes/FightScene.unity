@@ -580,6 +580,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2034182142, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
+      propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034182142, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
+      propertyPath: m_HDR
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034182139, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
+      propertyPath: skipCaptureRate
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
 --- !u!1 &572865134
@@ -817,7 +829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc81b9e0889c2d59b1b33f23c2eaa0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unixSocket: /home/ryan/code/Unity/AI Fighting/Assets/Scripts/python
+  unixSocket: /home/ryan/code/Unity/AI Fighting/Assets/Scripts/python/ai_controller
 --- !u!4 &838464510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,

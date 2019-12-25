@@ -6,12 +6,8 @@ using System.Threading;
 
 public class FrameCapture : MonoBehaviour
 {
-    // Only get a frame every 4 frames
-    public int skipCaptureRate = 4;
-    
     private Camera cam;
-    private int lastCapture = 0;
-    private bool isDoneCapturingFrame = true;
+    private bool shouldSendFrame = false;
     private PolicyConnection policy_con;
 
     void Awake()
@@ -23,14 +19,19 @@ public class FrameCapture : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         policy_con = GetComponent<PolicyConnection>();
-        policy_con.StartConnection();
+        policy_con.StartConnection(ResetShouldSendFrame);
+    }
+
+    public void ResetShouldSendFrame()
+    {
+        shouldSendFrame = true;
     }
 
     void OnPostRender()
     {
-        if (lastCapture >= skipCaptureRate && isDoneCapturingFrame)
+        if (shouldSendFrame)
         {
-            lastCapture = 1;
+            shouldSendFrame = false;
             RenderTexture renderTexture = cam.activeTexture;
             Texture2D tex2d = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGB24, false);
 
@@ -39,12 +40,7 @@ public class FrameCapture : MonoBehaviour
             tex2d.Apply();
             Color32[] framePixels = tex2d.GetPixels32();
             Thread createFrameThread = new Thread(() => CreateFrame(framePixels) );
-            isDoneCapturingFrame = false;
             createFrameThread.Start();
-        }
-        else
-        {
-            lastCapture++;
         }
     }
 
@@ -53,7 +49,5 @@ public class FrameCapture : MonoBehaviour
         string jsonStr = JsonSerializer.SerializeFrame(framePixels);
         Debug.Log(jsonStr);
         policy_con.SendState(jsonStr);
-        //Debug.Log(jsonStr);
-        isDoneCapturingFrame = true;
     }
 }
