@@ -590,9 +590,10 @@ GameObject:
   - component: {fileID: 7490691283668573513}
   - component: {fileID: 7490691283668573514}
   - component: {fileID: 1639525824}
+  - component: {fileID: 435585138}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -687,6 +688,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   deathTime: 0.1
+  alertTime: 5
+  hurtTime: 10
 --- !u!54 &7490691283668573515
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -719,6 +722,7 @@ MonoBehaviour:
   viewAngle: 85
   rotationSpeed: 5
   maxViewDistance: 20
+  agentHealth: {fileID: 0}
   isHurt: 0
 --- !u!195 &7490691283668573514
 NavMeshAgent:
@@ -754,9 +758,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563e363130ca53632a56e6e89eb75083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitDelay: 0.01
+  hitDelay: 1
   hitDistance: 2
   hitAngle: 20
+--- !u!114 &435585138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7490691283668573521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5f75a536ab3716b897e1fc8cfad2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointsWorth: 1
 --- !u!54 &305427683
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -820,7 +837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordAnimName: SwordAttack
   hitRate: 0.5
-  hitForce: 7
+  hitForce: 3
   hitDamage: 2
 --- !u!1001 &1724596456
 PrefabInstance:
