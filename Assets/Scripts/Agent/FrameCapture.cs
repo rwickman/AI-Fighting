@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
-
+using Newtonsoft.Json;
 
 public class FrameCapture : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class FrameCapture : MonoBehaviour
     private bool shouldSendFrame = false;
     private PolicyConnection policy_con;
     private bool hasStarted = false;
+    private const int numColorsInPixel = 3;
 
     void Awake()
     {  
@@ -52,8 +53,17 @@ public class FrameCapture : MonoBehaviour
 
     void CreateFrame(Color32[] framePixels)
     {
-        string jsonStr = JsonUtil2.SerializeFrame(framePixels);
-        Debug.Log(jsonStr);
+        int[,] pixels = new int[framePixels.Length, numColorsInPixel];
+        for (int i = 0; i < framePixels.Length; i++)
+        {
+            Color32 pixelColor = framePixels[i];
+            pixels[i, 0] = pixelColor.r;
+            pixels[i, 1] = pixelColor.g;
+            pixels[i, 2] = pixelColor.b;
+
+        }
+
+        string jsonStr = JsonConvert.SerializeObject(pixels);
         policy_con.SendState(jsonStr);
     }
 }

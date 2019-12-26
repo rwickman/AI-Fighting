@@ -7,6 +7,7 @@ public class AgentManager : MonoBehaviour
     public GameObject agent;
     public int numEpisodes;
     public string enemyTag = "Enemy";
+    public int currentReward;
 
     private Health agentHealth;
     private Score agentScore;
@@ -35,7 +36,7 @@ public class AgentManager : MonoBehaviour
             RestartEpisode();
         }
     }
-
+    
     void RestartEpisode()
     {
         Application.LoadLevel(Application.loadedLevel);
