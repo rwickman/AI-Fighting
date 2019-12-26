@@ -22,11 +22,12 @@ class Agent:
                         data = conn.recv(data_len, socket.MSG_WAITALL)
                         if not data:
                             break
-                        print(str(data))
                         json_str = json.loads(data)
-                        #print(data)
+                        # Submit to model
                         action = self.next_action()
-                        conn.send(str(len(action)).encode())
+                        actionLenStr = str(len(action))
+                        actionLenStr = (8 - len(actionLenStr)) * "0" + actionLenStr
+                        conn.send(actionLenStr.encode())
                         conn.send(action.encode())
     
     def next_action(self):

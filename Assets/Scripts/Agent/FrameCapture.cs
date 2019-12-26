@@ -9,6 +9,7 @@ public class FrameCapture : MonoBehaviour
     private Camera cam;
     private bool shouldSendFrame = false;
     private PolicyConnection policy_con;
+    private bool hasStarted = false;
 
     void Awake()
     {  
@@ -19,7 +20,7 @@ public class FrameCapture : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         policy_con = GetComponent<PolicyConnection>();
-        policy_con.StartConnection(ResetShouldSendFrame);
+       
     }
 
     public void ResetShouldSendFrame()
@@ -29,6 +30,11 @@ public class FrameCapture : MonoBehaviour
 
     void OnPostRender()
     {
+        if(!hasStarted)
+        {
+            policy_con.StartConnection(ResetShouldSendFrame);
+            hasStarted = true;
+        }
         if (shouldSendFrame)
         {
             shouldSendFrame = false;

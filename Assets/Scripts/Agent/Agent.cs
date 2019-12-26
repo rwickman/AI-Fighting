@@ -20,6 +20,9 @@ public class Agent : MonoBehaviour
     private GroundDetection groundDetection;
     private AgentCameraController cameraController;
 
+    private bool actionPerformed;
+    private Dictionary<string,float> actionDic;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +32,24 @@ public class Agent : MonoBehaviour
         cameraController = GetComponentInChildren<AgentCameraController>();
     }
 
+
+    void Update()
+    {
+        if(!actionPerformed)
+        {
+            PerformAction();
+            actionPerformed = true;
+        }
+    }
+
+    public void SetAction(Dictionary<string,float> actionDic)
+    {
+        this.actionDic = actionDic;
+        actionPerformed = false;
+    }
+
     // Update is called once per frame
-    public void PerformAction(Dictionary<string,float> actionDic)
+    public void PerformAction()
     {
         
         if (jumpElapsedTime < jumpDelay)

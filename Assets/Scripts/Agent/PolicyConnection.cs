@@ -51,10 +51,7 @@ public class PolicyConnection : MonoBehaviour
     {
         try
         {
-            //Debug.Log("Socket connected to " + client.RemoteEndPoint.ToString());
-            //SendState();
             client.EndConnect(ar);
-            Debug.Log("CONNECT CALLBACK");
             resetSendFrameCallback();            
         }
         catch (Exception e)
@@ -65,14 +62,10 @@ public class PolicyConnection : MonoBehaviour
 
     public void SendState(string jsonStr)
     {
-        //string fakeStateData = "Eventually this will contain state information";
-        //Debug.Log(jsonStr);
-        //byte[] byteData = Encoding.ASCII.GetBytes(jsonStr);
         byte[] byteData = new byte[headerLength + Encoding.ASCII.GetByteCount(jsonStr)];
         Encoding.ASCII.GetBytes(jsonStr.Length.ToString()).CopyTo(byteData, 0);
         Encoding.ASCII.GetBytes(jsonStr).CopyTo(byteData, headerLength);
 
-        Debug.Log("BYTE LENGTH: " + byteData.Length);
         client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendStateCallback), null);
     }
 
@@ -93,43 +86,22 @@ public class PolicyConnection : MonoBehaviour
 
     private void ReceiveActionBody(IAsyncResult ar)
     {
-        Debug.Log("ReceiveActionBody");
         StateObject state = (StateObject)ar.AsyncState;
         client.EndReceive(ar);
 
         int packetLength = int.Parse(Encoding.ASCII.GetString(state.buffer));
-        state.buffer = new byte[StateObject.MaxBufferSize];
+        state.buffer = new byte[packetLength];
         client.BeginReceive(state.buffer, 0, packetLength, 0, 
                             new AsyncCallback(ReceiveActionBodyCallback), state);
     }
     
     private void ReceiveActionBodyCallback(IAsyncResult ar)
     {
-        Debug.Log("ReceiveActionBodyCallback");
         client.EndReceive(ar);
         
         StateObject state = (StateObject)ar.AsyncState;
         string actionJson = Encoding.ASCII.GetString(state.buffer);
-        agent.PerformAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
+        agent.SetAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
         resetSendFrameCallback();
-    }
-    
-
-    private void ReceiveACKCallback(IAsyncResult ar)
-    {
-        StateObject state = (StateObject)ar.AsyncState;
-        
-        client.EndReceive(ar);
-
-        int ACKResponse = int.Parse(Encoding.ASCII.GetString(state.buffer));
-        if (ACKResponse == 0)
-        {
-            resetSendFrameCallback();
-            Debug.Log("GOT ACK");
-        }
-        else
-        {
-            Debug.LogError("ERROR OCCURRED IN RECEIVING ACK!");
-        }
     }
 }
