@@ -18,6 +18,7 @@ public class Agent : MonoBehaviour
     private Rigidbody rigidbody;
     private Sword sword;
     private GroundDetection groundDetection;
+    private AgentCameraController cameraController;
 
     // Start is called before the first frame update
     void Start()
@@ -25,10 +26,11 @@ public class Agent : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         sword = GetComponentInChildren<Sword>();
         groundDetection = transform.Find("Feet").GetComponent<GroundDetection>();
+        cameraController = GetComponentInChildren<AgentCameraController>();
     }
 
     // Update is called once per frame
-    void PerformAction(Dictionary actionDic)
+    public void PerformAction(Dictionary<string,float> actionDic)
     {
         
         if (jumpElapsedTime < jumpDelay)
@@ -36,24 +38,20 @@ public class Agent : MonoBehaviour
             jumpElapsedTime += Time.deltaTime;
         }
            
-        if (Input.GetButton("Fire1"))
+        if (actionDic["attack"] == 1f)
         {
             sword.Attack();
         }
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        bool isJumping = Input.GetKey(KeyCode.Space);
+        float h = actionDic["horizontal"];
+        float v = actionDic["vertical"];
+        bool isJumping = actionDic["jump"] == 1f;
+        cameraController.MoveCamera(actionDic["pitch"], actionDic["yaw"]);
 
         if ((h != 0 || v != 0 || isJumping) && isMoveable && groundDetection.isGrounded)
         {
             Move(h, v, isJumping);
         }
-        //else if (rigidbody.velocity.magnitude <= minVelocityMag)
-        //{
-        //    rigidbody.velocity = Vector3.Slerp(rigidbody.velocity, Vector3.zero, stoppingLerpTerm * Time.deltaTime);
-        //}
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
-        //rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
     }
 
     void Move(float horizontalMove, float verticalMove, bool isJumping)
@@ -81,8 +79,6 @@ public class Agent : MonoBehaviour
         {
             transform.Translate(moveDir * speed * Time.deltaTime);
         }
-        //rigidbody.velocity = new Vector3(hMove, 0f, vMove) * speed * Time.deltaTime;
-        //rigidbody.AddRelativeForce(new Vector3(horizontalMove * dirMoveFactor, 0f, verticalMove * dirMoveFactor).normalized * speed * Time.deltaTime);
     }
 
 }

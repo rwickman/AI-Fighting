@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class PolicyConnection : MonoBehaviour
@@ -26,7 +28,13 @@ public class PolicyConnection : MonoBehaviour
 
     private Socket client;
     private const int headerLength = 8;
-    private const int ACKLength = 1;
+    //private const int ACKLength = 1;
+    private Agent agent;
+    
+    void Awake()
+    {
+        agent = GetComponentInParent<Agent>();
+    }
 
     public void StartConnection(ResetShouldSendFrame resetSendFrameCallback)
     {
@@ -71,16 +79,41 @@ public class PolicyConnection : MonoBehaviour
     private void SendStateCallback(IAsyncResult ar)
     {
         client.EndSend(ar);
-        RecieveACK();
+        ReceiveAction();
     }
 
-    private void RecieveACK()
+    private void ReceiveAction()
     {
         // Create the state object.  
         StateObject state = new StateObject();
-        state.buffer = new byte[ACKLength];
-        client.BeginReceive(state.buffer, 0, ACKLength, 0, new AsyncCallback(ReceiveACKCallback), state);
+        state.buffer = new byte[headerLength];
+        client.BeginReceive(state.buffer, 0, headerLength, 0,
+                            new AsyncCallback(ReceiveActionBody), state);
     }
+
+    private void ReceiveActionBody(IAsyncResult ar)
+    {
+        Debug.Log("ReceiveActionBody");
+        StateObject state = (StateObject)ar.AsyncState;
+        client.EndReceive(ar);
+
+        int packetLength = int.Parse(Encoding.ASCII.GetString(state.buffer));
+        state.buffer = new byte[StateObject.MaxBufferSize];
+        client.BeginReceive(state.buffer, 0, packetLength, 0, 
+                            new AsyncCallback(ReceiveActionBodyCallback), state);
+    }
+    
+    private void ReceiveActionBodyCallback(IAsyncResult ar)
+    {
+        Debug.Log("ReceiveActionBodyCallback");
+        client.EndReceive(ar);
+        
+        StateObject state = (StateObject)ar.AsyncState;
+        string actionJson = Encoding.ASCII.GetString(state.buffer);
+        agent.PerformAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
+        resetSendFrameCallback();
+    }
+    
 
     private void ReceiveACKCallback(IAsyncResult ar)
     {
