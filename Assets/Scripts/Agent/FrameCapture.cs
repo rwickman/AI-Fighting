@@ -6,22 +6,22 @@ using Newtonsoft.Json;
 
 public class FrameCapture : MonoBehaviour
 {
+    private AgentManager agentManager;
     private Camera cam;
     private bool shouldSendFrame = false;
     private PolicyConnection policy_con;
     private bool hasStarted = false;
     private const int numColorsInPixel = 3;
 
-    void Awake()
-    {  
-    }
+    private bool sentEpisodeOverFrame = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
         cam = GetComponent<Camera>();
         policy_con = GetComponent<PolicyConnection>();
-       
+        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
     }
 
     public void ResetShouldSendFrame()
@@ -31,13 +31,16 @@ public class FrameCapture : MonoBehaviour
 
     void OnPostRender()
     {
+        Debug.Log("Should SEND FRAME: " + shouldSendFrame);
         if(!hasStarted)
         {
             policy_con.StartConnection(ResetShouldSendFrame);
+            Debug.Log("CONNECTED");
             hasStarted = true;
         }
-        if (shouldSendFrame)
+        if (shouldSendFrame && !sentEpisodeOverFrame)
         {
+            
             shouldSendFrame = false;
             RenderTexture renderTexture = cam.activeTexture;
             Texture2D tex2d = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGB24, false);
@@ -62,8 +65,20 @@ public class FrameCapture : MonoBehaviour
             pixels[i, 2] = pixelColor.b;
 
         }
-
-        string jsonStr = JsonConvert.SerializeObject(pixels);
-        policy_con.SendState(jsonStr);
+        var dict = new Dictionary<string, dynamic>();
+        if(!agentManager.isEpisodeOver)
+        {
+            dict["frame"] = pixels;
+        }
+        else
+        {
+            sentEpisodeOverFrame = true;
+            policy_con.isEpisodeOver = true;
+        }
+        dict["reward"] = agentManager.GetReward();
+        dict["done"] = agentManager.isEpisodeOver;
+        agentManager.ResetReward();
+        string jsonStr = JsonConvert.SerializeObject(dict);
+        policy_con.SendState(jsonStr);      
     }
 }

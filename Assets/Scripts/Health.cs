@@ -48,6 +48,13 @@ public class Health : MonoBehaviour
         print("DEAD!");
         //player.isMoveable = false;
         yield return new WaitForSeconds(deathTime);
-        Destroy(gameObject);
+        if (gameObject.name != "Agent")
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            // TODO: make agent invisible and undetectable
+        }
     }
 }

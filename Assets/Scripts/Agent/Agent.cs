@@ -20,9 +20,9 @@ public class Agent : MonoBehaviour
     private GroundDetection groundDetection;
     private AgentCameraController cameraController;
 
-    private bool actionPerformed;
+    private bool actionPerformed = true;
     private Dictionary<string,float> actionDic;
-    
+
     // Start is called before the first frame update
     void Start()
     {

@@ -30,10 +30,13 @@ public class PolicyConnection : MonoBehaviour
     private const int headerLength = 8;
     //private const int ACKLength = 1;
     private Agent agent;
-    
+    private AgentManager agentManager;
+    public bool isEpisodeOver = false;
+
     void Awake()
     {
         agent = GetComponentInParent<Agent>();
+        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
     }
 
     public void StartConnection(ResetShouldSendFrame resetSendFrameCallback)
@@ -72,7 +75,15 @@ public class PolicyConnection : MonoBehaviour
     private void SendStateCallback(IAsyncResult ar)
     {
         client.EndSend(ar);
-        ReceiveAction();
+        if(isEpisodeOver)
+        {
+            ReceiveEnd();
+        }
+        else
+        {
+            ReceiveAction();
+        }
+        
     }
 
     private void ReceiveAction()
@@ -103,5 +114,22 @@ public class PolicyConnection : MonoBehaviour
         string actionJson = Encoding.ASCII.GetString(state.buffer);
         agent.SetAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
         resetSendFrameCallback();
+    }
+    
+    private void ReceiveEnd()
+    {
+        Debug.Log("RECEIVE END");
+        // Create the state object.  
+        StateObject state = new StateObject();
+        state.buffer = new byte[1];
+        client.BeginReceive(state.buffer, 0, 1, 0,
+                            new AsyncCallback(ReceiveEndCallback), state);
+    }
+
+    private void ReceiveEndCallback(IAsyncResult ar)
+    {
+        Debug.Log("ReceiveEndCallback");
+        client.EndReceive(ar);
+        agentManager.shouldRestart = true;
     }
 }
