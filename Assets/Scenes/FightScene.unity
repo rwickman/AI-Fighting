@@ -120,6 +120,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: b7657bd714ea560128133ca75c8910bd, type: 2}
+--- !u!1 &31093652 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 743375437}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &31093660 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
@@ -191,6 +197,10 @@ PrefabInstance:
     - target: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878852074, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1511310973, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
@@ -329,12 +339,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &580948086 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
-    type: 3}
-  m_PrefabInstance: {fileID: 547111905}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,9 +565,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 580948086}
+  agent: {fileID: 31093652}
   numEpisodes: 0
   enemyTag: Enemy
+  isEpisodeOver: 0
+  shouldRestart: 0
 --- !u!1 &1248607542
 GameObject:
   m_ObjectHideFlags: 0

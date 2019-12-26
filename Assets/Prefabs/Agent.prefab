@@ -598,7 +598,7 @@ GameObject:
   - component: {fileID: 1304231193}
   m_Layer: 0
   m_Name: FrameCaptureCamera
-  m_TagString: Untagged
+  m_TagString: FrameCapture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -685,6 +685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unixSocket: /home/ryan/code/Unity/AI Fighting/Assets/Scripts/python/ai_controller
+  isEpisodeOver: 0
 --- !u!114 &1304231193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1067,6 +1068,7 @@ MonoBehaviour:
   hitRate: 0.5
   hitForce: 3
   hitDamage: 2
+  enemyTag: Enemy
 --- !u!1001 &681691306175354276
 PrefabInstance:
   m_ObjectHideFlags: 0
