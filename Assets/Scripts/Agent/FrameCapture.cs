@@ -31,7 +31,6 @@ public class FrameCapture : MonoBehaviour
 
     void OnPostRender()
     {
-        Debug.Log("Should SEND FRAME: " + shouldSendFrame);
         if(!hasStarted)
         {
             policy_con.StartConnection(ResetShouldSendFrame);

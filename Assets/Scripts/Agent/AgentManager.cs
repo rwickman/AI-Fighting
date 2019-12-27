@@ -26,6 +26,8 @@ public class AgentManager : MonoBehaviour
 
     public bool isEpisodeOver = false;
     public bool shouldRestart = false;
+    
+    private bool lastRewardApplied = false;
 
     void Awake()
     {
@@ -39,15 +41,18 @@ public class AgentManager : MonoBehaviour
     }
 
     void Update()
-    {
-        if (agentHealth.health <= 0)
+    {    
+        
+        if (agentHealth.health <= 0 && !lastRewardApplied)
         {
             UpdateReward(RewardType.Lost);
+            lastRewardApplied = true;
             isEpisodeOver = true;
         }
-        else if (agentScore.GetScore() >=  pointsToWin)
+        else if (agentScore.GetScore() >=  pointsToWin && !lastRewardApplied)
         {
             UpdateReward(RewardType.Win);
+            lastRewardApplied = true;
             isEpisodeOver = true;
         }
         if(shouldRestart)

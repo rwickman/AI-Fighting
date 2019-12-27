@@ -20,7 +20,7 @@ public class PolicyConnection : MonoBehaviour
         public byte[] buffer;
     }
 
-    public string unixSocket = "/home/ryan/code/Unity/AI Fighting/Assets/Scripts/python/ai_controller";
+    public string unixSocket;
     [HideInInspector]
     public delegate void ResetShouldSendFrame();
 
@@ -35,6 +35,8 @@ public class PolicyConnection : MonoBehaviour
 
     void Awake()
     {
+        unixSocket = Application.dataPath + "/Scripts/Agent/python/ai_controller";
+        print(unixSocket);
         agent = GetComponentInParent<Agent>();
         agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
     }
