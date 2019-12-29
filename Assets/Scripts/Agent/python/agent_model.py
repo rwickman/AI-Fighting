@@ -58,9 +58,17 @@ class AgentModel:
    
     
     def build_model(self):
+        # tanh -> [-1,1], sigmoid -> [0,1]
         vgg16_model = tf.keras.applications.vgg16.VGG16(include_top=True)
-        x = tf.keras.layers.Dense(self.num_actions, name='actions')(vgg16_model.layers[-2].output)
-        self.model = tf.keras.models.Model(inputs=vgg16_model.input, outputs=x)
+        vertical = tf.keras.layers.Dense(1, activation="tanh")(vgg16_model.layers[-2].output)
+        horizontal = tf.keras.layers.Dense(1, activation="tanh")(vgg16_model.layers[-2].output)
+        pitch = tf.keras.layers.Dense(1, activation="sigmoid")(vgg16_model.layers[-2].output)
+        yaw = tf.keras.layers.Dense(1, activation="sigmoid")(vgg16_model.layers[-2].output)
+        jump = tf.keras.layers.Dense(1, activation="sigmoid")(vgg16_model.layers[-2].output)
+        attack = tf.keras.layers.Dense(1, activation="sigmoid")(vgg16_model.layers[-2].output)
+        actions = tf.keras.layers.concatenate([vertical,horizontal,pitch,yaw,jump,attack])  
+        #x = tf.keras.layers.Dense(self.num_actions, name='actions')(vgg16_model.layers[-2].output)
+        self.model = tf.keras.models.Model(inputs=vgg16_model.input, outputs=actions)
         self.model.summary()
 
     def next_action(self):
