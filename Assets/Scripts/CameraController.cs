@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
     private Camera m_cam;
     private float yaw = 0.0f;
     private float pitch = 0.0f;
-    public float speedH = 2.0f;
-    public float speedV = 2.0f;
+    public float speedH = 5.0f;
+    public float speedV = 5.0f;
     public float camFollowPlayerLerpTerm = 6.4f;
 
     public float pitchMin = -80f;

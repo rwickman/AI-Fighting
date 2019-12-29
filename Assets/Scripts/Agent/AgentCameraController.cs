@@ -24,16 +24,16 @@ public class AgentCameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void MoveCamera(float pitch, float yaw)
+    public void MoveCamera(float pitchMove, float yawMove)
     {
-        //print(camFollowAgentLerpTerm * Time.deltaTime);
+        // pitchMove and yawMove are one of {-1,0,1}
         transform.position = Vector3.Lerp(transform.position, agent.transform.position + offset, camFollowAgentLerpTerm * Time.deltaTime);
-
-        yaw += speedH * pitch;
-        pitch -= speedV * yaw;       
+        yaw += speedH * yawMove;
+        pitch -= speedV * pitchMove;
+        
         //the rotation range
         pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
-        //Debug.Log("ptich: " + pitch);
+
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 }
