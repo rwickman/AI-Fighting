@@ -9,11 +9,12 @@ public class Sword : MonoBehaviour
     public float hitRate = 0.5f;
     public float hitForce = 1.4f;
     public int hitDamage = 2;
+    public float attackElapsedTime = 0f;
 
     public string enemyTag = "Enemy"; 
     private Animator m_anim;
     private Collider m_coll;
-    private float elapsedTime = 0f, animElapsedTime = 0f;
+    private float animElapsedTime = 0f;
     private float hitAnimTime;
     private HashSet<int> objectsHitAlready = new HashSet<int>();
 
@@ -38,7 +39,7 @@ public class Sword : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        elapsedTime += Time.deltaTime;
+        attackElapsedTime += Time.deltaTime;
         animElapsedTime += Time.deltaTime;
 
         if (animElapsedTime > hitAnimTime && objectsHitAlready.Count > 0) {
@@ -48,9 +49,9 @@ public class Sword : MonoBehaviour
 
     public void Attack()
     {
-        if(elapsedTime >= hitRate) {
+        if(attackElapsedTime >= hitRate) {
             m_anim.SetTrigger("isAttacking");
-            elapsedTime = 0f;
+            attackElapsedTime = 0f;
             animElapsedTime = 0f;
         }
     }

@@ -8,7 +8,8 @@ public class StateCapture : MonoBehaviour
     public int numRaycast = 20;
 
     private const int numSubFeatures = 10;
-
+    private Health agentHealth;
+    private Sword agentSword;
     int layerMask;
 
     // Start is called before the first frame update
@@ -17,6 +18,8 @@ public class StateCapture : MonoBehaviour
         // Ignroe this AI layers
         layerMask = 1 << 8;
         layerMask = ~layerMask;
+        agentHealth = GetComponent<Health>();
+        agentSword = GetComponentInChildren<Sword>();
     }
 
     // Update is called once per frame
@@ -28,6 +31,11 @@ public class StateCapture : MonoBehaviour
     void RaycastState()
     {
         List<float> stateFeatures = new List<float>();
+
+        // Add this AI state
+        AddAgentState(ref stateFeatures);
+        
+        // Add state for AI "view"
         float angle = 0;
         for (int i = 0; i < numRaycast; i++)
         {
@@ -74,6 +82,20 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(ref stateFeatures, dir);
             }
         }
+        print(stateFeatures.Count);
+    }
+
+    void AddAgentState(ref List<float> stateFeatures)
+    {
+        stateFeatures.Add(transform.position.x);
+        stateFeatures.Add(transform.position.y);
+        stateFeatures.Add(transform.position.z);
+        stateFeatures.Add(transform.rotation.x);
+        stateFeatures.Add(transform.rotation.y);
+        stateFeatures.Add(transform.rotation.z);
+        stateFeatures.Add(transform.rotation.w);
+        stateFeatures.Add(agentHealth.health);
+        stateFeatures.Add(agentSword.attackElapsedTime);
     }
 
     void RaycastSubState(ref List<float> stateFeatures, Vector3 dir)
