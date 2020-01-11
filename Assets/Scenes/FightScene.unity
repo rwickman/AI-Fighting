@@ -132,6 +132,20 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 743375437}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &31093662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31093652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc81b9e0889c2d59b1b33f23c2eaa0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unixSocket: 
+  isEpisodeOver: 0
 --- !u!1001 &547111905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -454,7 +468,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
-      value: 39
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1304231193, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: speedV
