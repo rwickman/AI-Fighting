@@ -1,16 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class StateCapture : MonoBehaviour
 {
 
     public int numRaycast = 20;
 
+    public bool shouldSendState = false;
+    
+    
     private const int numSubFeatures = 10;
+    private int layerMask;
+
+    private bool hasStarted = false;
+    private bool sentEpisodeOver = false;
+
     private Health agentHealth;
     private Sword agentSword;
-    int layerMask;
+    private AgentManager agentManager;
+    private PolicyConnection policy_con;
+
+    private List<float> stateFeatures;
 
     // Start is called before the first frame update
     void Start()
@@ -20,20 +32,33 @@ public class StateCapture : MonoBehaviour
         layerMask = ~layerMask;
         agentHealth = GetComponent<Health>();
         agentSword = GetComponentInChildren<Sword>();
+        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
+        policy_con = GetComponent<PolicyConnection>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        RaycastState();
+        if (!hasStarted)
+        {
+            policy_con.StartConnection(ResetShouldSendState);
+            hasStarted = true;
+        }
+        if (shouldSendState && !sentEpisodeOver)
+        {
+            RaycastState();
+            SendState();
+        }
+        
     }
 
     void RaycastState()
     {
-        List<float> stateFeatures = new List<float>();
+        stateFeatures = new List<float>();
 
         // Add this AI state
-        AddAgentState(ref stateFeatures);
+        AddAgentState();
         
         // Add state for AI "view"
         float angle = 0;
@@ -79,13 +104,43 @@ public class StateCapture : MonoBehaviour
             // Raycast single ray
             foreach (Vector3 dir in dirs_non_duplicates)
             {
-                RaycastSubState(ref stateFeatures, dir);
+                RaycastSubState(dir);
             }
         }
-        print(stateFeatures.Count);
+        //print(stateFeatures.Count);
     }
 
-    void AddAgentState(ref List<float> stateFeatures)
+    void SendState()
+    {
+        var dict = new Dictionary<string, dynamic>();
+
+        dict["state"] = stateFeatures.ToArray();
+        dict["reward"] = agentManager.GetReward();
+        dict["done"] = agentManager.isEpisodeOver;
+        sentEpisodeOver = agentManager.isEpisodeOver;
+        agentManager.ResetReward();
+        string jsonStr = JsonConvert.SerializeObject(dict);
+        policy_con.SendState(jsonStr);
+    }
+
+
+    void RaycastSubState(Vector3 dir)
+    {
+        RaycastHit hit;
+
+        Debug.DrawRay(transform.position, dir*2, Color.magenta);
+        if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))
+        {
+            AddEnvironmentStateFeatures(hit.collider.gameObject);
+            Debug.Log("HIT: " + hit.collider.gameObject.name);
+        }
+        else
+        {
+            AddEmptyStateFeatures();
+        }
+    }
+
+    void AddAgentState()
     {
         stateFeatures.Add(transform.position.x);
         stateFeatures.Add(transform.position.y);
@@ -98,23 +153,7 @@ public class StateCapture : MonoBehaviour
         stateFeatures.Add(agentSword.attackElapsedTime);
     }
 
-    void RaycastSubState(ref List<float> stateFeatures, Vector3 dir)
-    {
-        RaycastHit hit;
-
-        Debug.DrawRay(transform.position, dir*2, Color.magenta);
-        if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))
-        {
-            AddStateFeatures(ref stateFeatures, hit.collider.gameObject);
-            Debug.Log("HIT: " + hit.collider.gameObject.name);
-        }
-        else
-        {
-            AddEmptyStateFeatures(ref stateFeatures);
-        }
-    }
-
-    void AddStateFeatures(ref List<float> stateFeatures, GameObject raycastedObject)
+    void AddEnvironmentStateFeatures(GameObject raycastedObject)
     {
         int tagID = GetTagID(raycastedObject.tag);
         bool isHuman = tagID == 1 || tagID == 2;
@@ -139,7 +178,7 @@ public class StateCapture : MonoBehaviour
         stateFeatures.Add(Vector3.Distance(raycastedObject.transform.position, raycastedObject.transform.position));
     }
 
-    void AddEmptyStateFeatures(ref List<float> stateFeatures)
+    void AddEmptyStateFeatures()
     {
         for (int i = 0; i < numSubFeatures; i++)
         {
@@ -164,5 +203,10 @@ public class StateCapture : MonoBehaviour
             default:
                 return 0;
         }
+    }
+
+    public void ResetShouldSendState()
+    {
+        shouldSendState = true;
     }
 }
