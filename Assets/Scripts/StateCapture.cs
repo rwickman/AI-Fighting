@@ -7,7 +7,10 @@ public class StateCapture : MonoBehaviour
 
     public int numRaycast = 20;
 
+    private const int numSubFeatures = 10;
+
     int layerMask;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,7 @@ public class StateCapture : MonoBehaviour
 
     void RaycastState()
     {
+        List<float> stateFeatures = new List<float>();
         float angle = 0;
         for (int i = 0; i < numRaycast; i++)
         {
@@ -46,12 +50,12 @@ public class StateCapture : MonoBehaviour
 
             List<Vector3> dirs_non_duplicates = new List<Vector3>();
             
-            for (int j = 0; j < dirs.Length; j++)
+          for (int j = 0; j < dirs.Length; j++)
             {
                 bool isDuplicate = false;
                 foreach (Vector3 dir in dirs_non_duplicates)
                 {
-                    if (dirs[j].x == dir.x && dirs[j].y == dir.y && dirs[j].z == dir.z)
+                    if (dirs[j].Equals(dir))
                     {
                         isDuplicate = true;
                         break;
@@ -67,21 +71,76 @@ public class StateCapture : MonoBehaviour
             // Raycast single ray
             foreach (Vector3 dir in dirs_non_duplicates)
             {
-                RaycastSubState(dir);
+                RaycastSubState(ref stateFeatures, dir);
             }
-
-
         }
     }
 
-    void RaycastSubState(Vector3 dir)
+    void RaycastSubState(ref List<float> stateFeatures, Vector3 dir)
     {
         RaycastHit hit;
 
-        Debug.DrawRay(transform.position, dir, Color.magenta);
+        Debug.DrawRay(transform.position, dir*2, Color.magenta);
         if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))
         {
+            AddStateFeatures(ref stateFeatures, hit.collider.gameObject);
             Debug.Log("HIT: " + hit.collider.gameObject.name);
+        }
+        else
+        {
+            AddEmptyStateFeatures(ref stateFeatures);
+        }
+    }
+
+    void AddStateFeatures(ref List<float> stateFeatures, GameObject raycastedObject)
+    {
+        int tagID = GetTagID(raycastedObject.tag);
+        bool isHuman = tagID == 1 || tagID == 2;
+        
+        stateFeatures.Add(tagID);
+        if (isHuman)
+        {
+            stateFeatures.Add(raycastedObject.gameObject.GetComponent<Health>().health);
+        }
+        else
+        {
+            // Add zero health to objects that are not humans as they have no health
+            stateFeatures.Add(0);
+        }
+        stateFeatures.Add(raycastedObject.transform.position.x);
+        stateFeatures.Add(raycastedObject.transform.position.y);
+        stateFeatures.Add(raycastedObject.transform.position.z);
+        stateFeatures.Add(raycastedObject.transform.rotation.x);
+        stateFeatures.Add(raycastedObject.transform.rotation.y);
+        stateFeatures.Add(raycastedObject.transform.rotation.z);
+        stateFeatures.Add(raycastedObject.transform.rotation.w);
+        stateFeatures.Add(Vector3.Distance(raycastedObject.transform.position, raycastedObject.transform.position));
+    }
+
+    void AddEmptyStateFeatures(ref List<float> stateFeatures)
+    {
+        for (int i = 0; i < numSubFeatures; i++)
+        {
+            stateFeatures.Add(0);
+        }
+    }
+
+    int GetTagID(string tag)
+    {
+        switch (tag)
+        {
+            case "Player":
+                return 1;
+            case "Enemy":
+                return 2;
+            case "Wall":
+                return 3;
+            case "Ground":
+                return 4;
+            case "Sword":
+                return 5;
+            default:
+                return 0;
         }
     }
 }

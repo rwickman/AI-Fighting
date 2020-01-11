@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - GameManager
   - FrameCapture
+  - Sword
+  - Wall
   layers:
   - Default
   - TransparentFX

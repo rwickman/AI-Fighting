@@ -132,22 +132,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 743375437}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &31093661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31093652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 280c6021773a04943a802913c00d194e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numRaycast: 30
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1001 &547111905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166,6 +150,11 @@ PrefabInstance:
     - target: {fileID: 1878852074, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098714470157, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
@@ -226,6 +215,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
@@ -428,7 +422,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 6.24e-43, y: -4.2923016e-21, z: 6.24e-43, w: 1.0045e-41}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -453,6 +447,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
+      propertyPath: numRaycast
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1304231193, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: speedV
       value: 5
@@ -520,6 +518,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 5395584665398970552, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
@@ -720,6 +723,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
+      propertyPath: m_TagString
+      value: Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 1769947097, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -866,6 +873,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Arena
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975741047665, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749977151102524, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749977159214623, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599636122041980110, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6599636123036612892, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c794e553c16e3a92b7876b82053957b, type: 3}
