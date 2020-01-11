@@ -151,10 +151,15 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4869848098714470157, guid: 68602d550d8d5238fa24117460705ad5,
+    - target: {fileID: 3509641240924194303, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
       propertyPath: m_TagString
       value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098714470157, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
@@ -449,7 +454,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
-      value: 30
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 1304231193, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: speedV
@@ -522,7 +527,7 @@ PrefabInstance:
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_TagString
-      value: Sword
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5395584665398970552, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
@@ -543,6 +548,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814731633967140013, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sword
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
@@ -725,7 +735,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
-      value: Sword
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1769947097, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_AnchorMax.x
@@ -804,6 +814,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sword
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
