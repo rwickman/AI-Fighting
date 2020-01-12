@@ -35,7 +35,11 @@ public class Health : MonoBehaviour
         // Returns if death
         hurtTime = 0f;
         health -= hitPoints;
-        healthSlider.value = (float)health / (float)startingHealth;
+        if (healthSlider)
+        {
+            healthSlider.value = (float)health / (float)startingHealth;
+        }
+        
         print(name + " got hurt!");
         if (health <= 0) {
             StartCoroutine("Death");

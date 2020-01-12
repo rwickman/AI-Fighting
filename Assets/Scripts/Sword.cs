@@ -79,7 +79,7 @@ public class Sword : MonoBehaviour
             dir += Vector3.up;
             if (other.gameObject.tag != "Player")
             {
-                Debug.DrawLine(transform.position, dir * hitForce, Color.white, 10f);
+                //Debug.DrawLine(transform.position, dir * hitForce, Color.white, 10f);
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 enemy.AddForce(dir * hitForce, ForceMode.Impulse);
                 if (other.gameObject.tag == enemyTag)
@@ -91,7 +91,7 @@ public class Sword : MonoBehaviour
             {
                 agentManager.UpdateReward(AgentManager.RewardType.AgentHurt);
                 other.gameObject.GetComponent<Rigidbody>().AddForce(dir * hitForce, ForceMode.Impulse);
-                Debug.DrawLine(transform.position, dir * hitForce, Color.red, 10f);
+                //Debug.DrawLine(transform.position, dir * hitForce, Color.red, 10f);
             }
         }
     }
