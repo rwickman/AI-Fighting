@@ -24,6 +24,9 @@ public class StateCapture : MonoBehaviour
 
     private List<float> stateFeatures;
 
+    // Limit capturing to once per frame
+    //private bool capturedStateThisFrame = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -128,11 +131,11 @@ public class StateCapture : MonoBehaviour
     {
         RaycastHit hit;
 
-        Debug.DrawRay(transform.position, dir*2, Color.magenta);
+        //Debug.DrawRay(transform.position, dir*2, Color.magenta);
         if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))
         {
             AddEnvironmentStateFeatures(hit.collider.gameObject);
-            Debug.Log("HIT: " + hit.collider.gameObject.name);
+            //Debug.Log("HIT: " + hit.collider.gameObject.name);
         }
         else
         {

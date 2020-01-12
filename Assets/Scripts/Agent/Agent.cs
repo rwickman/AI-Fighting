@@ -18,10 +18,19 @@ public class Agent : MonoBehaviour
     private Rigidbody rigidbody;
     private Sword sword;
     private GroundDetection groundDetection;
-    private AgentCameraController cameraController;
+    //private AgentCameraController cameraController;
 
     private bool actionPerformed = true;
     private Dictionary<string,float> actionDic;
+
+
+    // Variables for changing view
+    private float yaw = 0.0f;
+    private float pitch = 0.0f;
+    public float speedH = 2.0f;
+    public float speedV = 2.0f;
+    public float pitchMin = -90f;
+    public float pitchMax = 90f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +38,7 @@ public class Agent : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         sword = GetComponentInChildren<Sword>();
         groundDetection = transform.Find("Feet").GetComponent<GroundDetection>();
-        cameraController = GetComponentInChildren<AgentCameraController>();
+        //cameraController = GetComponentInChildren<AgentCameraController>();
     }
 
 
@@ -64,13 +73,13 @@ public class Agent : MonoBehaviour
         float h = actionDic["horizontal"];
         float v = actionDic["vertical"];
         bool isJumping = actionDic["jump"] == 1f;
-        cameraController.MoveCamera(actionDic["pitch"], actionDic["yaw"]);
+        //cameraController.MoveCamera(actionDic["pitch"], actionDic["yaw"]);
 
         if ((h != 0 || v != 0 || isJumping) && isMoveable && groundDetection.isGrounded)
         {
             Move(h, v, isJumping);
         }
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
+        //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
     }
 
     void Move(float horizontalMove, float verticalMove, bool isJumping)
@@ -98,6 +107,17 @@ public class Agent : MonoBehaviour
         {
             transform.Translate(moveDir * speed * Time.deltaTime);
         }
+    }
+
+    void Look(float yawMove, float pitchMove)
+    {
+        yaw += speedH * yawMove;
+        pitch -= speedV * pitchMove;
+        
+        //the rotation range
+        pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
+
+        transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 
 }

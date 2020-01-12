@@ -20,7 +20,7 @@ public class PolicyConnection : MonoBehaviour
         public byte[] buffer;
     }
 
-    public string unixSocket;
+    private string unixSocket;
     [HideInInspector]
     public delegate void ResetShouldSendFrame();
 
@@ -31,6 +31,7 @@ public class PolicyConnection : MonoBehaviour
     //private const int ACKLength = 1;
     private Agent agent;
     private AgentManager agentManager;
+    [HideInInspector]
     public bool isEpisodeOver = false;
 
     void Awake()
