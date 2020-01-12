@@ -127,11 +127,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804243817}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
       value: 30
@@ -202,6 +197,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
       objectReference: {fileID: 0}
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
@@ -284,11 +284,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 530310233}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -343,6 +338,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
@@ -491,11 +491,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2028069126}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
       value: 30
@@ -566,6 +561,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
       objectReference: {fileID: 0}
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
@@ -669,11 +669,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 530310233}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -751,6 +746,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_TagString
@@ -804,16 +804,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1511310973, guid: 68602d550d8d5238fa24117460705ad5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -889,6 +879,16 @@ PrefabInstance:
     - target: {fileID: 4869848098760665273, guid: 68602d550d8d5238fa24117460705ad5,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869848098760665279, guid: 68602d550d8d5238fa24117460705ad5,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1032,11 +1032,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1524413953}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -1113,6 +1108,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
@@ -1225,11 +1225,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 992520948}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1285,6 +1280,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
 --- !u!1 &990593204
@@ -1338,7 +1338,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990593204}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
   m_Name: 
@@ -1357,6 +1357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 992520948}
+  - component: {fileID: 992520949}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -1381,6 +1382,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &992520949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992520947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  numEpisodes: 0
+  enemyTag: Enemy
+  isEpisodeOver: 0
+  shouldRestart: 0
 --- !u!1001 &1170844913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1388,11 +1406,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1524413953}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1447,6 +1460,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
@@ -1559,11 +1577,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2028069126}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -1641,6 +1654,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_TagString
@@ -1661,11 +1679,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 355494140}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -1743,6 +1756,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_TagString
@@ -1763,11 +1781,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 355494140}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
       value: 30
@@ -1839,6 +1852,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
+      objectReference: {fileID: 0}
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_TagString
@@ -1908,11 +1926,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804243817}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1967,6 +1980,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
@@ -2046,11 +2064,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 992520948}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1769947097, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2119,6 +2132,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
 --- !u!4 &1648422403 stripped
@@ -2134,11 +2152,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1524413953}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
       value: 30
@@ -2210,6 +2223,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
+      objectReference: {fileID: 0}
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_TagString
@@ -2279,11 +2297,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804243817}
     m_Modifications:
-    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 1188942648, guid: efa2f456835540a9687ea9b4eed547be, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -2361,6 +2374,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7490691283668573521, guid: efa2f456835540a9687ea9b4eed547be,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8296172667485297121, guid: efa2f456835540a9687ea9b4eed547be,
         type: 3}
       propertyPath: m_TagString
@@ -2414,11 +2432,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 530310233}
     m_Modifications:
-    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: m_Name
-      value: Agent
-      objectReference: {fileID: 0}
     - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
       propertyPath: numRaycast
       value: 30
@@ -2490,6 +2503,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
+      objectReference: {fileID: 0}
     - target: {fileID: 681691306705505887, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_TagString
@@ -2559,11 +2577,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 355494140}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2618,6 +2631,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
@@ -2697,11 +2715,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2028069126}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2756,6 +2769,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     - target: {fileID: 6598749975682062224, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
@@ -2802,11 +2820,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 992520948}
     m_Modifications:
-    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
-        type: 3}
-      propertyPath: m_Name
-      value: Arena
-      objectReference: {fileID: 0}
     - target: {fileID: 6598749975595435925, guid: 3c794e553c16e3a92b7876b82053957b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2861,6 +2874,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598749975595435926, guid: 3c794e553c16e3a92b7876b82053957b,
+        type: 3}
+      propertyPath: m_Name
+      value: Arena
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c794e553c16e3a92b7876b82053957b, type: 3}
