@@ -20,9 +20,9 @@ public class AgentManager : MonoBehaviour
 
     private Health agentHealth;
     private Score agentScore;
-    private GameObject[] enemies;
+    private List<Health> enemies;
     
-    private int pointsToWin;
+    //private int pointsToWin;
 
     public bool isEpisodeOver = false;
     public bool shouldRestart = false;
@@ -31,13 +31,16 @@ public class AgentManager : MonoBehaviour
 
     void Awake()
     {
+        enemies = new List<Health>();
+        foreach (Transform child in transform)
+        {
+            if (child.tag == "Enemy")
+            {
+                enemies.Add(child.gameObject.GetComponent<Health>());
+            }
+        }
         agentHealth = agent.GetComponent<Health>();
         agentScore = agent.GetComponent<Score>();
-        enemies = GameObject.FindGameObjectsWithTag(enemyTag);
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            pointsToWin += enemies[i].GetComponent<Score>().pointsWorth;
-        }
     }
 
     void Update()
@@ -49,7 +52,7 @@ public class AgentManager : MonoBehaviour
             lastRewardApplied = true;
             isEpisodeOver = true;
         }
-        else if (agentScore.GetScore() >=  pointsToWin && !lastRewardApplied)
+        else if (!lastRewardApplied && AllEnemiesDead())
         {
             UpdateReward(RewardType.Win);
             lastRewardApplied = true;
@@ -61,6 +64,18 @@ public class AgentManager : MonoBehaviour
         }
     }
 
+    private bool AllEnemiesDead()
+    {
+        foreach (Health enemyHealth in enemies)
+        {
+            if (enemyHealth.health > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public void RestartEpisode()
     {
         Application.LoadLevel(Application.loadedLevel);
@@ -81,4 +96,5 @@ public class AgentManager : MonoBehaviour
     {
         currentReward = 0;
     }
+
 }
