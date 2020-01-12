@@ -13,11 +13,12 @@ public class AgentManager : MonoBehaviour
         AgentHurt = -1,
         Lost = -100        
     }
-    public GameObject agent;
+    
     public int numEpisodes;
     public string enemyTag = "Enemy";
     private int currentReward;
 
+    private GameObject agent;
     private Health agentHealth;
     private Score agentScore;
     private List<Health> enemies;
@@ -37,6 +38,10 @@ public class AgentManager : MonoBehaviour
             if (child.tag == "Enemy")
             {
                 enemies.Add(child.gameObject.GetComponent<Health>());
+            }
+            else if (child.tag == "Player")
+            {
+                agent = child.gameObject;
             }
         }
         agentHealth = agent.GetComponent<Health>();

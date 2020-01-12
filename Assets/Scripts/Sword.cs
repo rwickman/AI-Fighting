@@ -27,7 +27,7 @@ public class Sword : MonoBehaviour
         m_anim = GetComponent<Animator>();
         m_coll = GetComponent<Collider>();
         score = GetComponentInParent<Score>();
-        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
+        agentManager = GetComponentInParent<AgentManager>();
         RuntimeAnimatorController ac = m_anim.runtimeAnimatorController;
         for (int i = 0; i < ac.animationClips.Length; i++) {
             if (ac.animationClips[i].name == swordAnimName) {

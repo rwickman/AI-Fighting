@@ -35,7 +35,7 @@ public class StateCapture : MonoBehaviour
         layerMask = ~layerMask;
         agentHealth = GetComponent<Health>();
         agentSword = GetComponentInChildren<Sword>();
-        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
+        agentManager = GetComponentInParent<AgentManager>();
         policy_con = GetComponent<PolicyConnection>();
         
     }
@@ -121,6 +121,7 @@ public class StateCapture : MonoBehaviour
         dict["reward"] = agentManager.GetReward();
         dict["done"] = agentManager.isEpisodeOver;
         sentEpisodeOver = agentManager.isEpisodeOver;
+        policy_con.isEpisodeOver = agentManager.isEpisodeOver;
         agentManager.ResetReward();
         string jsonStr = JsonConvert.SerializeObject(dict);
         policy_con.SendState(jsonStr);

@@ -39,7 +39,7 @@ public class PolicyConnection : MonoBehaviour
         unixSocket = Application.dataPath + "/Scripts/Agent/python/ai_controller";
         print(unixSocket);
         agent = GetComponentInParent<Agent>();
-        agentManager = GameObject.Find("GameManager").GetComponent<AgentManager>();
+        agentManager = GetComponentInParent<AgentManager>();
     }
 
     public void StartConnection(ResetShouldSendFrame resetSendFrameCallback)
