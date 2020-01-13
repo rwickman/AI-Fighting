@@ -9,13 +9,13 @@ class PPOModel:
         self.hidden_size = hidden_size
         self.num_hidden_layers = num_hidden_layers
         self.lose_rate = 1e-4
-        self.var = 1
+        self.var = 1.0
         self.epsilon_clip = epsilon_clip
 
     
     def ppo_loss_continuous(self, advantage, old_prediction):
         def loss(y_true, y_pred):
-            denom = tf.keras.backend.sqrt(2 * np.pi * self.var)
+            denom = tf.keras.backend.sqrt(tf.keras.backend.variable(2.0 * np.pi * self.var))
             prob_num = tf.keras.backend.exp(- tf.keras.backend.square(y_true - y_pred) / (2 * self.var))
             old_prob_num = tf.keras.backend.exp(- tf.keras.backend.square(y_true - old_prediction) / (2 * self.var))
 
@@ -48,7 +48,7 @@ class PPOModel:
                 advantage=advantage,
                 old_prediction=old_prediction)]
             )
-        self.critic.compile(optimzer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
+        self.critic.compile(optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
         
         self.actor.summary()
         self.critic.summary()
