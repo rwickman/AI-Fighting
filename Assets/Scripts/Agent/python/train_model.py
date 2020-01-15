@@ -78,7 +78,6 @@ class TrainModel:
                 """
 
                 if env_dic["done"]:
-                    print("DONE")
                     # Tell the game to restart the episode
                     conn.send("0".encode())
                     print("SEND LAST")

@@ -70,11 +70,13 @@ class PPOModel:
         Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
         """
         T = len(ep_dic["rewards"])
+        ep_dic["values"] = np.append(ep_dic["values"], 0)
         ep_dic["adv"] = gaelam = np.empty(T, 'float32')
         lastgaelam = 0
-        for t in reversed(range(T)):
+        for t in range(T-1, -1, -1):
             delta = ep_dic["rewards"][t] + self.gamma * ep_dic["values"][t+1] - ep_dic["values"][t]
             gaelam[t] = lastgaelam = delta + self.gamma * self.lam * lastgaelam
+        ep_dic["values"] = np.delete(ep_dic["values"], -1)
         ep_dic["tdlamret"] = ep_dic["adv"] + ep_dic["values"]
 
         
