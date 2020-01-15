@@ -52,6 +52,7 @@ public class StateCapture : MonoBehaviour
         {
             RaycastState();
             SendState();
+            shouldSendState = false;
         }
         
     }
@@ -110,7 +111,7 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(dir);
             }
         }
-        //print(stateFeatures.Count);
+        print("TOTAL: " + stateFeatures.Count);
     }
 
     void SendState()
