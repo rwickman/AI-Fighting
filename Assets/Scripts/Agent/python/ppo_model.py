@@ -1,9 +1,12 @@
+"Based on https://github.com/openai/baselines/blob/master/baselines/ppo1/pposgd_simple.py"
+
 import tensorflow as tf
 import numpy as np
+from normal_distribution import NormalDistribution
 
 
 class PPOModel:
-    def __init__(self, num_states, num_actions = 11, hidden_size=256, num_hidden_layers = 5, epsilon_clip=0.2 ):
+    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.2, gamma=0.99, lam=0.95):
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
@@ -11,7 +14,10 @@ class PPOModel:
         self.lose_rate = 1e-4
         self.var = 1.0
         self.epsilon_clip = epsilon_clip
-
+        self.distribution = NormalDistribution()
+        self.build_actor_and_critic()
+        self.gamma = gamma
+        self.lam = lam
     
     def ppo_loss_continuous(self, advantage, old_prediction):
         def loss(y_true, y_pred):
@@ -21,6 +27,7 @@ class PPOModel:
 
             prob = prob_num/denom
             old_prob = old_prob_num/denom
+            
             r = prob/(old_prob + 1e-10)
 
             return -tf.keras.backend.mean(tf.keras.backend.minimum(r * advantage, tf.keras.backend.clip(r, min_value=1 - self.epsilon_clip, max_value=1 + self.epsilon_clip) * advantage))
@@ -39,7 +46,7 @@ class PPOModel:
         out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
         out_critic = tf.keras.layers.Dense(1)(x)
 
-        self.actor = tf.keras.models.Model(inputs=[inputs, advantage, old_prediction], outputs=[out_actor])
+        self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
 
         self.actor.compile(
@@ -48,10 +55,28 @@ class PPOModel:
                 advantage=advantage,
                 old_prediction=old_prediction)]
             )
-        self.critic.compile(optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
+        #self.critic.compile(optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
         
         self.actor.summary()
         self.critic.summary()
+
+    def next_action_and_value(self, observ):
+        self.distribution.mean = self.actor.predict(observ)
+        return self.distribution.sample(), self.critic.predict(observ)
+    
+
+    def add_vtarg_and_adv(self, ep_dic):
+        """
+        Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
+        """
+        T = len(ep_dic["rewards"])
+        ep_dic["adv"] = gaelam = np.empty(T, 'float32')
+        lastgaelam = 0
+        for t in reversed(range(T)):
+            delta = ep_dic["rewards"][t] + self.gamma * ep_dic["values"][t+1] - ep_dic["values"][t]
+            gaelam[t] = lastgaelam = delta + self.gamma * self.lam * lastgaelam
+        ep_dic["tdlamret"] = ep_dic["adv"] + ep_dic["values"]
+
         
-ppo_model = PPOModel(10)
-ppo_model.build_actor_and_critic()
+#ppo_model = PPOModel(10)
+#ppo_model.build_actor_and_critic()
