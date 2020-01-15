@@ -22,9 +22,9 @@ public class PolicyConnection : MonoBehaviour
 
     private string unixSocket;
     [HideInInspector]
-    public delegate void ResetShouldSendFrame();
+    public delegate void ResetShouldSendState();
 
-    private ResetShouldSendFrame resetSendFrameCallback;
+    private ResetShouldSendState resetSendStateCallback;
 
     private Socket client;
     private const int headerLength = 8;
@@ -42,9 +42,9 @@ public class PolicyConnection : MonoBehaviour
         agentManager = GetComponentInParent<AgentManager>();
     }
 
-    public void StartConnection(ResetShouldSendFrame resetSendFrameCallback)
+    public void StartConnection(ResetShouldSendState resetSendStateCallback)
     {
-        this.resetSendFrameCallback = resetSendFrameCallback;
+        this.resetSendStateCallback = resetSendStateCallback;
         client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
         var unixEP = new UnixEndPoint(unixSocket);
         // client.Connect(unixEp);
@@ -58,7 +58,7 @@ public class PolicyConnection : MonoBehaviour
         try
         {
             client.EndConnect(ar);
-            resetSendFrameCallback();            
+            resetSendStateCallback();            
         }
         catch (Exception e)
         {
@@ -116,7 +116,7 @@ public class PolicyConnection : MonoBehaviour
         StateObject state = (StateObject)ar.AsyncState;
         string actionJson = Encoding.ASCII.GetString(state.buffer);
         agent.SetAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
-        resetSendFrameCallback();
+        resetSendStateCallback();
     }
     
     private void ReceiveEnd()
@@ -131,7 +131,8 @@ public class PolicyConnection : MonoBehaviour
 
     private void ReceiveEndCallback(IAsyncResult ar)
     {
-        Debug.Log("ReceiveEndCallback");
+        StateObject state = (StateObject)ar.AsyncState;
+        Debug.Log("ReceiveEndCallback: " + Encoding.ASCII.GetString(state.buffer));
         client.EndReceive(ar);
         agentManager.shouldRestart = true;
     }
