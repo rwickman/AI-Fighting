@@ -265,12 +265,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEpisodeOver: 0
---- !u!1 &31093652 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 681691306659291629, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-    type: 3}
-  m_PrefabInstance: {fileID: 743375437}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &31093660 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
@@ -1225,6 +1219,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 992520948}
     m_Modifications:
+    - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
+      propertyPath: shouldSendState
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1297,7 +1295,6 @@ GameObject:
   m_Component:
   - component: {fileID: 990593206}
   - component: {fileID: 990593205}
-  - component: {fileID: 990593207}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -1331,23 +1328,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &990593207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990593204}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 31093652}
-  numEpisodes: 0
-  enemyTag: Enemy
-  isEpisodeOver: 0
-  shouldRestart: 0
 --- !u!1 &992520947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,7 +1374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
   numEpisodes: 0
   enemyTag: Enemy
   isEpisodeOver: 0
