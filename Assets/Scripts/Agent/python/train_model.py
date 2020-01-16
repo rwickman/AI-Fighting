@@ -3,15 +3,16 @@ import socket, sys, os, json
 
 import tensorflow as tf
 import numpy as np
+import argparse
 
 from ppo_model import PPOModel
 
 class TrainModel:
-    def __init__(self):
+    def __init__(self ,args):
         self.server_adr = "./ai_controller"
         self.num_actions = 6
         # TODO: Dynamically set the number of states and actions
-        self.ppo_model = PPOModel(num_states=2109, num_actions=self.num_actions)
+        self.ppo_model = PPOModel(num_states=2109, should_load_model=args.load_models, num_actions=self.num_actions, epochs=args.epochs)
         #self.ppo_model.build_actor_and_critic()
         self.header_len = 8
 
@@ -24,20 +25,21 @@ class TrainModel:
                 conn, client_adr = s.accept()
                 print("Connected by", client_adr)
                 with conn:
-                    ep_dic = self.run_episode(conn)
-                    self.ppo_model.add_vtarg_and_adv(ep_dic)
-                    # self.ppo_model.update_old_model()
-                    #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
-                    self.ppo_model.train(ep_dic)
-                    print("Saving Models")
-                    self.ppo_model.save_models()
+                    while True:
+                        ep_dic = self.run_episode(conn)
+                        self.ppo_model.add_vtarg_and_adv(ep_dic)
+                        # self.ppo_model.update_old_model()
+                        #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
+                        self.ppo_model.train(ep_dic)
+                        print("Saving Models")
+                        self.ppo_model.save_models()
 
-                    print("SEND LAST")
-                    end_msg = "0" * 3
-                    endLenStr = str(len(end_msg))
-                    endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr
-                    conn.send(endLenStr.encode())
-                    conn.send(end_msg.encode())
+                        print("SEND LAST")
+                        end_msg = "0" * 3
+                        endLenStr = str(len(end_msg))
+                        endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr
+                        conn.send(endLenStr.encode())
+                        conn.send(end_msg.encode())
 
     def run_episode(self, conn):
         # TODO: Tell the game to start a new episode
@@ -106,9 +108,21 @@ class TrainModel:
         temp_action = {"vertical" : 1, "horizontal" : 0, "pitch" : 0, "yaw" : 0, "jump" : 0, "attack" : 1}
         return json.dumps(temp_action)
 
-if os.path.exists("ai_controller"):
-    os.remove("ai_controller")
 
-agent = TrainModel()
-# agent.build_model()
-agent.start()
+def main(args):
+    if os.path.exists("ai_controller"):
+        os.remove("ai_controller")
+
+    agent = TrainModel(args)
+    # agent.build_model()
+    agent.start()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--load_models", action="store_true",
+        help="Load the saved models.")
+    parser.add_argument("--epochs", type=int, default=1,
+        help="Number of epochs to train on each episode.")
+    args = parser.parse_args()
+    main(args)
