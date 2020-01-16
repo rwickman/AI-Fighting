@@ -2,11 +2,12 @@
 
 import tensorflow as tf
 import numpy as np
+import random
 from normal_distribution import NormalDistribution
 
 
 class PPOModel:
-    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=5):
+    def __init__(self, num_states, should_load_model=False, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=5):
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
@@ -15,7 +16,10 @@ class PPOModel:
         self.var = 1.0
         self.epsilon_clip = epsilon_clip
         self.distribution = NormalDistribution()
-        self.build_actor_and_critic()
+        if should_load_model:
+            self.load_models()
+        else:
+            self.build_actor_and_critic()
         self.gamma = gamma
         self.lam = lam
         self.entropy_coeff = entropy_coeff
@@ -81,6 +85,7 @@ class PPOModel:
         ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
     
     def train(self, ep_dic):
+        self.shuffle_ep_dic(ep_dic)
         for _ in range(self.epochs):
             for i in range(len(ep_dic["observations"])):
                 with tf.GradientTape(persistent=True) as tape:
@@ -92,6 +97,13 @@ class PPOModel:
                 #print("GRADS: ", grads)
                 self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
                 del tape
+
+    def shuffle_ep_dic(self, ep_dic):
+        seed = random.random()
+        for k in ep_dic:
+            if isinstance(ep_dic[k], list):
+                random.seed(seed)
+                random.shuffle(ep_dic[k])
 
     def value_loss(self, value, ret):
         return tf.reduce_mean(tf.square(ret - value))
@@ -117,6 +129,15 @@ class PPOModel:
     def save_models(self):
         self.actor.save("actor_model.h5")
         self.critic.save("critic_model.h5")
+
+
+    def load_models(self):
+        self.actor = tf.keras.models.load_model("actor_model.h5")
+        self.critic = tf.keras.models.load_model("critic_model.h5")
+        self.optimizer = tf.keras.optimizers.Adam()
+        self.actor.summary()
+        self.critic.summary()
+
     # def update_old_model(self):
     #     self.actor_old = tf.keras.models.clone_model(self.actor)
     #     self.actor_old.set_weights(self.actor.get_weights())

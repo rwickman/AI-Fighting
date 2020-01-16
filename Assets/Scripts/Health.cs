@@ -15,7 +15,8 @@ public class Health : MonoBehaviour
     public float alertTime = 2f;
     // Time since last hurt
     public float hurtTime = 10f;
-    private int startingHealth;
+    [HideInInspector]
+    public int startingHealth;
     private Slider healthSlider;
 
     void Start()
@@ -48,6 +49,11 @@ public class Health : MonoBehaviour
         return false;
     }
 
+    public void ResetHealthSlider()
+    {
+        healthSlider.value = 1f; 
+    }
+    
     IEnumerator Death() {
         print("DEAD!");
         //player.isMoveable = false;
