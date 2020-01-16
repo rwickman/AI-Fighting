@@ -61,7 +61,7 @@ class PPOModel:
         #         old_prediction=old_prediction)]
         #     )
         #self.critic.compile(optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
-        
+        #print("Trainable: ", self.critic.trainable_variables)
         self.actor.summary()
         self.critic.summary()
 
@@ -89,14 +89,17 @@ class PPOModel:
     def train(self, ep_dic):
         ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
         with tf.GradientTape() as tape:
-            for t in self.layer_tensors:
-                tape.watch(t)
-            policy_loss, value_loss = self.ppo_loss(ep_dic, 0)
-        grads = tape.gradient(policy_loss, self.actor.trainable_variables)
-        self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
+            value_loss = self.value_loss(self.critic(ep_dic["observations"][0]), ep_dic["tdlamret"][0])
+        print(value_loss)
+        #grads = tape.gradient(policy_loss, self.actor.trainable_variables)
+        #self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
         grads = tape.gradient(value_loss, self.critic.trainable_variables)
+        print(grads)
         self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
     
+    def value_loss(self, value, ret):
+        return tf.reduce_mean(tf.square(ret - value))
+
     def ppo_loss(self, ep_dic, index):
         cur_action, cur_val = self.next_action_and_value(ep_dic["observations"][index])
 
