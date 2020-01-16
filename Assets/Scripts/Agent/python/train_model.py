@@ -26,6 +26,9 @@ class TrainModel:
                 self.ppo_model.add_vtarg_and_adv(ep_dic)
                 print("tdlamret", ep_dic["tdlamret"])
                 print("adv", ep_dic["adv"])
+                # self.ppo_model.update_old_model()
+                #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
+                self.ppo_model.train(ep_dic)
                 return
 
     def run_episode(self, conn):
@@ -34,6 +37,7 @@ class TrainModel:
         rewards = []
         val_preds = []
         actions = []
+        means = []
         #prev_acts = []
         ep_ret = 0
         ep_len = 0
@@ -51,21 +55,23 @@ class TrainModel:
                     break
                 
                 env_dic = json.loads(data)
-                observs.append(env_dic["state"])
+
+                state_arr = np.array(env_dic["state"])
+                state_arr = np.reshape(state_arr, (1, state_arr.shape[0]))
+                observs.append(state_arr)
                 rewards.append(env_dic["reward"])
                 ep_ret += env_dic["reward"]
                 ep_len += 1
                 
                 #print(env_dic["reward"])
-                state_arr = np.array(env_dic["state"])
-                state_arr = np.reshape(state_arr, (1, state_arr.shape[0]))
-            
                 action, val = self.ppo_model.next_action_and_value(state_arr)
                 action = action.numpy()[0]
                 # print("action: ", action)
                 # print("value:", val[0])
                 val_preds.append(val[0])
                 actions.append(action)
+                means.append(self.ppo_model.distribution.mean)
+                
 
 
                 """
@@ -87,6 +93,7 @@ class TrainModel:
                         "rewards" : rewards,
                         "values" : val_preds,
                         "actions" : actions,
+                        "means" : means,
                         "episode_return" : ep_ret,
                         "episode_length" : ep_len,
                         }
