@@ -79,6 +79,7 @@ public class Agent : MonoBehaviour
         {
             Move(h, v, isJumping);
         }
+        Look(actionDic["yaw"], actionDic["pitch"]);
         //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
     }
 

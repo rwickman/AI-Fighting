@@ -11,7 +11,7 @@ class TrainModel:
         self.server_adr = "./ai_controller"
         self.num_actions = 6
         # TODO: Dynamically set the number of states and actions
-        self.ppo_model = PPOModel(num_states=2079, num_actions=self.num_actions)
+        self.ppo_model = PPOModel(num_states=2109, num_actions=self.num_actions)
         #self.ppo_model.build_actor_and_critic()
 
     def start(self):

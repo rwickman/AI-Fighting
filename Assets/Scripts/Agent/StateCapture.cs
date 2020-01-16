@@ -84,12 +84,13 @@ public class StateCapture : MonoBehaviour
 
             // Remove duplicate rays (there is probably a better way to do this but oh well)
             Vector3[] dirs = { dir1, dir2, dir3, dir4, dir5, dir6, dir7 };
-
+            /*
             List<Vector3> dirs_non_duplicates = new List<Vector3>();
             
-          for (int j = 0; j < dirs.Length; j++)
+            for (int j = 0; j < dirs.Length; j++)
             {
                 bool isDuplicate = false;
+                
                 foreach (Vector3 dir in dirs_non_duplicates)
                 {
                     if (dirs[j].Equals(dir))
@@ -104,9 +105,9 @@ public class StateCapture : MonoBehaviour
                     dirs_non_duplicates.Add(dirs[j]);
                 }
             }
-
+            */
             // Raycast single ray
-            foreach (Vector3 dir in dirs_non_duplicates)
+            foreach (Vector3 dir in dirs)
             {
                 RaycastSubState(dir);
             }
