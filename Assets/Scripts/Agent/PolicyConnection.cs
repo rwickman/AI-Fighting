@@ -108,25 +108,37 @@ public class PolicyConnection : MonoBehaviour
         client.BeginReceive(state.buffer, 0, packetLength, 0, 
                             new AsyncCallback(ReceiveActionBodyCallback), state);
     }
-    
+
     private void ReceiveActionBodyCallback(IAsyncResult ar)
     {
         client.EndReceive(ar);
-        
+
         StateObject state = (StateObject)ar.AsyncState;
         string actionJson = Encoding.ASCII.GetString(state.buffer);
         agent.SetAction(JsonConvert.DeserializeObject<Dictionary<string, float>>(actionJson));
         resetSendStateCallback();
     }
-    
+ 
     private void ReceiveEnd()
     {
         Debug.Log("RECEIVE END");
         // Create the state object.  
         StateObject state = new StateObject();
-        state.buffer = new byte[1];
-        client.BeginReceive(state.buffer, 0, 1, 0,
+        state.buffer = new byte[headerLength];
+        client.BeginReceive(state.buffer, 0, headerLength, 0,
+                            new AsyncCallback(ReceiveEndBody), state);
+    }
+
+    private void ReceiveEndBody(IAsyncResult ar)
+    {
+        StateObject state = (StateObject)ar.AsyncState;
+        client.EndReceive(ar);
+
+        int packetLength = int.Parse(Encoding.ASCII.GetString(state.buffer));
+        state.buffer = new byte[packetLength];
+        client.BeginReceive(state.buffer, 0, packetLength, 0, 
                             new AsyncCallback(ReceiveEndCallback), state);
+        
     }
 
     private void ReceiveEndCallback(IAsyncResult ar)

@@ -6,7 +6,7 @@ from normal_distribution import NormalDistribution
 
 
 class PPOModel:
-    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=5):
+    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=1):
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
