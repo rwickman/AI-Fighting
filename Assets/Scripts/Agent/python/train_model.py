@@ -24,12 +24,11 @@ class TrainModel:
                 print("Connected by", client_adr)
                 ep_dic = self.run_episode(conn)
                 self.ppo_model.add_vtarg_and_adv(ep_dic)
-                print("tdlamret", ep_dic["tdlamret"])
-                print("adv", ep_dic["adv"])
                 # self.ppo_model.update_old_model()
                 #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
                 self.ppo_model.train(ep_dic)
-                return
+                print("DONE TRAINING")
+                conn.send("0".encode())
 
     def run_episode(self, conn):
         # TODO: Tell the game to start a new episode
@@ -85,7 +84,6 @@ class TrainModel:
 
                 if env_dic["done"]:
                     # Tell the game to restart the episode
-                    conn.send("0".encode())
                     print("SEND LAST")
                     # conn.close()
                     return {

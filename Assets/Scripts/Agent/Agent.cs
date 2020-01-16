@@ -66,13 +66,13 @@ public class Agent : MonoBehaviour
             jumpElapsedTime += Time.deltaTime;
         }
            
-        if (actionDic["attack"] == 1f)
+        if (actionDic["attack"] >= 0)
         {
             sword.Attack();
         }
         float h = actionDic["horizontal"];
         float v = actionDic["vertical"];
-        bool isJumping = actionDic["jump"] == 1f;
+        bool isJumping = actionDic["jump"] >= 0;
         //cameraController.MoveCamera(actionDic["pitch"], actionDic["yaw"]);
 
         if ((h != 0 || v != 0 || isJumping) && isMoveable && groundDetection.isGrounded)

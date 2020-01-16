@@ -81,18 +81,17 @@ class PPOModel:
         ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
     
     def train(self, ep_dic):
-        for i in range(len(ep_dic["observations"])):
-            with tf.GradientTape(persistent=True) as tape:
-                policy_loss, value_loss = self.ppo_loss(ep_dic, i)
-                #value_loss = self.value_loss(self.critic(ep_dic["observations"][0]), ep_dic["tdlamret"][0])
-            #print(value_loss)
-            grads = tape.gradient(policy_loss, self.actor.trainable_variables)
-            print("GRADS: ", grads)
-            self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
-            grads = tape.gradient(value_loss, self.critic.trainable_variables)
-            print("GRADS: ", grads)
-            self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
-            del tape
+        for _ in range(self.epochs):
+            for i in range(len(ep_dic["observations"])):
+                with tf.GradientTape(persistent=True) as tape:
+                    policy_loss, value_loss = self.ppo_loss(ep_dic, i)
+                grads = tape.gradient(policy_loss, self.actor.trainable_variables)
+                #print("GRADS: ", grads)
+                self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
+                grads = tape.gradient(value_loss, self.critic.trainable_variables)
+                #print("GRADS: ", grads)
+                self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
+                del tape
 
     def value_loss(self, value, ret):
         return tf.reduce_mean(tf.square(ret - value))
