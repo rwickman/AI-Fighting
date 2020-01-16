@@ -24,18 +24,20 @@ class TrainModel:
                 conn, client_adr = s.accept()
                 print("Connected by", client_adr)
                 with conn:
-                    while True:
-                        ep_dic = self.run_episode(conn)
-                        self.ppo_model.add_vtarg_and_adv(ep_dic)
-                        # self.ppo_model.update_old_model()
-                        #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
-                        self.ppo_model.train(ep_dic)
-                        print("SEND LAST")
-                        end_msg = "0" * 3
-                        endLenStr = str(len(end_msg))
-                        endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr
-                        conn.send(endLenStr.encode())
-                        conn.send(end_msg.encode())
+                    ep_dic = self.run_episode(conn)
+                    self.ppo_model.add_vtarg_and_adv(ep_dic)
+                    # self.ppo_model.update_old_model()
+                    #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
+                    self.ppo_model.train(ep_dic)
+                    print("Saving Models")
+                    self.ppo_model.save_models()
+
+                    print("SEND LAST")
+                    end_msg = "0" * 3
+                    endLenStr = str(len(end_msg))
+                    endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr
+                    conn.send(endLenStr.encode())
+                    conn.send(end_msg.encode())
 
     def run_episode(self, conn):
         # TODO: Tell the game to start a new episode
