@@ -9,13 +9,15 @@ public class StateCapture : MonoBehaviour
     public int numRaycast = 20;
 
     public bool shouldSendState = false;
+    [HideInInspector]
+    public bool sentEpisodeOver = false;
     
-    
+     private bool hasStarted = false;
     private const int numSubFeatures = 10;
     private int layerMask;
 
-    private bool hasStarted = false;
-    private bool sentEpisodeOver = false;
+   
+    
 
     private Health agentHealth;
     private Sword agentSword;
@@ -112,7 +114,7 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(dir);
             }
         }
-        print("TOTAL: " + stateFeatures.Count);
+        //print("TOTAL: " + stateFeatures.Count);
     }
 
     void SendState()

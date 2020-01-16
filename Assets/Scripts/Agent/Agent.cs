@@ -100,7 +100,7 @@ public class Agent : MonoBehaviour
         if (isJumping && jumpElapsedTime >= jumpDelay)
         {
             jumpElapsedTime = 0f;
-            Debug.Log("Jumpping");
+            //Debug.Log("Jumpping");
             moveDir += Vector3.up;
             rigidbody.AddRelativeForce(moveDir * jumpForce * Time.deltaTime, ForceMode.Impulse);
         }
