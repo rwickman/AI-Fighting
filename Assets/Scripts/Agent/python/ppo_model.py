@@ -6,7 +6,7 @@ from normal_distribution import NormalDistribution
 
 
 class PPOModel:
-    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1):
+    def __init__(self, num_states, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=5):
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
@@ -15,11 +15,11 @@ class PPOModel:
         self.var = 1.0
         self.epsilon_clip = epsilon_clip
         self.distribution = NormalDistribution()
-        self.layer_tensors = []
         self.build_actor_and_critic()
         self.gamma = gamma
         self.lam = lam
         self.entropy_coeff = entropy_coeff
+        self.epochs = epochs
     
     def ppo_loss_continuous(self, advantage, old_prediction):
         def loss(y_true, y_pred):
@@ -37,37 +37,32 @@ class PPOModel:
 
     
     def build_actor_and_critic(self):
-        inputs = tf.keras.Input(shape=(self.num_states,))
-        advantage = tf.keras.Input(shape=(1,))
-        old_prediction = tf.keras.Input(shape=(self.num_actions,))
-        
-        x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
-        self.layer_tensors.append(x)
-        for _ in range(self.num_hidden_layers - 1):
-            x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
-            self.layer_tensors.append(x)
-        out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
-        out_critic = tf.keras.layers.Dense(1)(x)
-        self.layer_tensors.append(out_actor)
-        self.layer_tensors.append(out_critic)
-
-        self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
-        self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
+        self.build_actor()
+        self.build_critic()
         self.optimizer = tf.keras.optimizers.Adam()
-        # self.actor.compile(
-        #     optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate),
-        #     loss=[self.ppo_loss_continuous(
-        #         advantage=advantage,
-        #         old_prediction=old_prediction)]
-        #     )
-        #self.critic.compile(optimizer=tf.keras.optimizers.Adam(lr=self.lose_rate), loss="mse")
-        #print("Trainable: ", self.critic.trainable_variables)
         self.actor.summary()
         self.critic.summary()
 
+    def build_critic(self):
+        inputs = tf.keras.Input(shape=(self.num_states,))
+        x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
+        for _ in range(self.num_hidden_layers - 1):
+            x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
+        out_critic = tf.keras.layers.Dense(1)(x)
+        self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
+
+    def build_actor(self):
+        inputs = tf.keras.Input(shape=(self.num_states,))
+        x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
+        for _ in range(self.num_hidden_layers - 1):
+            x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
+        out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
+        self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
+
+
     def next_action_and_value(self, observ):
-        self.distribution.mean = self.actor.predict(observ)
-        return self.distribution.sample(), self.critic.predict(observ)
+        self.distribution.mean = self.actor(observ)
+        return self.distribution.sample(), self.critic(observ)
     
 
     def add_vtarg_and_adv(self, ep_dic):
@@ -83,20 +78,22 @@ class PPOModel:
             gaelam[t] = lastgaelam = delta + self.gamma * self.lam * lastgaelam
         ep_dic["values"] = np.delete(ep_dic["values"], -1)
         ep_dic["tdlamret"] = ep_dic["adv"] + ep_dic["values"]
-
-
+        ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
     
     def train(self, ep_dic):
-        ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
-        with tf.GradientTape() as tape:
-            value_loss = self.value_loss(self.critic(ep_dic["observations"][0]), ep_dic["tdlamret"][0])
-        print(value_loss)
-        #grads = tape.gradient(policy_loss, self.actor.trainable_variables)
-        #self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
-        grads = tape.gradient(value_loss, self.critic.trainable_variables)
-        print(grads)
-        self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
-    
+        for i in range(len(ep_dic["observations"])):
+            with tf.GradientTape(persistent=True) as tape:
+                policy_loss, value_loss = self.ppo_loss(ep_dic, i)
+                #value_loss = self.value_loss(self.critic(ep_dic["observations"][0]), ep_dic["tdlamret"][0])
+            #print(value_loss)
+            grads = tape.gradient(policy_loss, self.actor.trainable_variables)
+            print("GRADS: ", grads)
+            self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
+            grads = tape.gradient(value_loss, self.critic.trainable_variables)
+            print("GRADS: ", grads)
+            self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
+            del tape
+
     def value_loss(self, value, ret):
         return tf.reduce_mean(tf.square(ret - value))
 
