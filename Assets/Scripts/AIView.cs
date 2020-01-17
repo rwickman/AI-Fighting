@@ -17,7 +17,8 @@ public class AIView : MonoBehaviour
     private bool islookingAtTarget;
     private float angleToTarget;
     private NavMeshAgent agent;
-
+    private float timeSinceSeen = 0f;
+    private float alertTime = 3f;
 
     void Start()
     {
@@ -42,6 +43,12 @@ public class AIView : MonoBehaviour
         //Debug.Log(agentHealth.hurtTime < agentHealth.alertTime);
         if (agentHealth.hurtTime < agentHealth.alertTime || angleToTarget < viewAngle && distanceToTarget <= maxViewDistance)
         {
+            timeSinceSeen = 0f;
+            Move();
+        }
+        else if (timeSinceSeen <= alertTime)
+        {
+            timeSinceSeen += Time.deltaTime;
             Move();
         }
     }

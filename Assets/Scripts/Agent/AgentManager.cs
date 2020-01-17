@@ -7,8 +7,8 @@ public class AgentManager : MonoBehaviour
 
     public enum RewardType
     {
-        EnemyHurt = 10,
-        EnemyKilled = 10,
+        EnemyHurt = 25,
+        EnemyKilled = 50,
         Win = 100,
         AgentHurt = -10,
         Lost = -100,

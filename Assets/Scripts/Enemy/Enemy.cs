@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     private AIView view;
     private Sword sword;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +46,7 @@ public class Enemy : MonoBehaviour
         rb.isKinematic = false;
         agent.enabled = false;
         rb.AddForce(force, mode);
-        Debug.Log(force);
+        //Debug.Log(force);
         hitTime = Time.time;
         view.isHurt = true;
     }

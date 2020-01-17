@@ -41,7 +41,7 @@ public class Health : MonoBehaviour
             healthSlider.value = (float)health / (float)startingHealth;
         }
         
-        print(name + " got hurt!");
+//        print(name + " got hurt!");
         if (health <= 0) {
             StartCoroutine("Death");
             return true;
@@ -55,7 +55,7 @@ public class Health : MonoBehaviour
     }
     
     IEnumerator Death() {
-        print("DEAD!");
+        //print("DEAD!");
         //player.isMoveable = false;
         yield return new WaitForSeconds(deathTime);
         if (gameObject.tag == "Enemy")
