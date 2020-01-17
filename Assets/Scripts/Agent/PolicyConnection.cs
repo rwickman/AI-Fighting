@@ -33,11 +33,12 @@ public class PolicyConnection : MonoBehaviour
     private AgentManager agentManager;
     [HideInInspector]
     public bool isEpisodeOver = false;
+    private const int port = 12001;
 
     void Awake()
     {
-        unixSocket = Application.dataPath + "/Scripts/Agent/python/ai_controller";
-        print(unixSocket);
+        //unixSocket = Application.dataPath + "/Scripts/Agent/python/ai_controller";
+        //print(unixSocket);
         agent = GetComponentInParent<Agent>();
         agentManager = GetComponentInParent<AgentManager>();
     }
@@ -45,10 +46,21 @@ public class PolicyConnection : MonoBehaviour
     public void StartConnection(ResetShouldSendState resetSendStateCallback)
     {
         this.resetSendStateCallback = resetSendStateCallback;
-        client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-        var unixEP = new UnixEndPoint(unixSocket);
-        // client.Connect(unixEp);
-        client.BeginConnect(unixEP,
+
+        //client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
+        //var unixEP = new UnixEndPoint(unixSocket);
+
+        // Establish the remote endpoint for the socket.
+        IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+        IPAddress ipAddress = ipHostInfo.AddressList[0];
+        Debug.Log(ipAddress);
+        IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+
+        // Create a TCP/IP socket.  
+        client = new Socket(ipAddress.AddressFamily,
+                SocketType.Stream, ProtocolType.Tcp);
+        
+        client.BeginConnect(remoteEP,
             new AsyncCallback(ConnectCallback), null);
     }
 
@@ -86,7 +98,6 @@ public class PolicyConnection : MonoBehaviour
         {
             ReceiveAction();
         }
-        
     }
 
     private void ReceiveAction()

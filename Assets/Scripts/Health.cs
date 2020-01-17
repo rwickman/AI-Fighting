@@ -60,7 +60,7 @@ public class Health : MonoBehaviour
         yield return new WaitForSeconds(deathTime);
         if (gameObject.name != "Agent")
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         else
         {
