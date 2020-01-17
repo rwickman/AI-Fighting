@@ -78,7 +78,7 @@ class PPOModel:
         ep_dic["adv"] = gaelam = np.empty(T, 'float32')
         lastgaelam = 0
         for t in range(T-1, -1, -1):
-            delta = ep_dic["rewards"][t] + self.gamma * ep_dic["values"][t+1] - ep_dic["values"][t]
+            delta = ep_dic["rewards"][t] + self.gamma * ep_dic["values"][t+1] - ep_dic["values"][t] # TD Error
             gaelam[t] = lastgaelam = delta + self.gamma * self.lam * lastgaelam
         ep_dic["values"] = np.delete(ep_dic["values"], -1)
         ep_dic["tdlamret"] = ep_dic["adv"] + ep_dic["values"]
@@ -97,6 +97,8 @@ class PPOModel:
                 #print("GRADS: ", grads)
                 self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
                 del tape
+        self.save_models()
+        return self.actor.get_weights(), self.critic.get_weights()
 
     def shuffle_ep_dic(self, ep_dic):
         seed = random.random()
