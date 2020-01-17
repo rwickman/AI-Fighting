@@ -17,6 +17,7 @@ class TrainModel:
         self.header_len = 8
         self.port = 12001
 
+
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -24,15 +25,14 @@ class TrainModel:
             s.listen(6)
             print("Starting accepting")
             while True:
+                print("WAITING TO ACCEPT")
                 conn, client_adr = s.accept()
                 print("Connected by", client_adr)
                 worker = AgentWorker(self.ppo_model)
                 training_worker = threading.Thread(target=worker.start_training_agent, args=(conn,))
-                training_worker.run()
+                training_worker.start()
+                #training_worker.join()
                 
-    def next_action(self):
-        temp_action = {"vertical" : 1, "horizontal" : 0, "pitch" : 0, "yaw" : 0, "jump" : 0, "attack" : 1}
-        return json.dumps(temp_action)
 
 
 def main(args):

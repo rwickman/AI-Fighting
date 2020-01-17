@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import random
 from normal_distribution import NormalDistribution
+import threading
 
 
 class PPOModel:
@@ -24,6 +25,7 @@ class PPOModel:
         self.lam = lam
         self.entropy_coeff = entropy_coeff
         self.epochs = epochs
+        self.train_lock = threading.Lock()
     
     def ppo_loss_continuous(self, advantage, old_prediction):
         def loss(y_true, y_pred):
@@ -85,20 +87,24 @@ class PPOModel:
         ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
     
     def train(self, ep_dic):
-        self.shuffle_ep_dic(ep_dic)
-        for _ in range(self.epochs):
-            for i in range(len(ep_dic["observations"])):
-                with tf.GradientTape(persistent=True) as tape:
-                    policy_loss, value_loss = self.ppo_loss(ep_dic, i)
-                grads = tape.gradient(policy_loss, self.actor.trainable_variables)
-                #print("GRADS: ", grads)
-                self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
-                grads = tape.gradient(value_loss, self.critic.trainable_variables)
-                #print("GRADS: ", grads)
-                self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
-                del tape
-        self.save_models()
-        return self.actor.get_weights(), self.critic.get_weights()
+        with self.train_lock:
+            print("Training")
+            self.shuffle_ep_dic(ep_dic)
+            for _ in range(self.epochs):
+                for i in range(len(ep_dic["observations"])):
+                    with tf.GradientTape(persistent=True) as tape:
+                        policy_loss, value_loss = self.ppo_loss(ep_dic, i)
+                    grads = tape.gradient(policy_loss, self.actor.trainable_variables)
+                    #print("GRADS: ", grads)
+                    self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
+                    grads = tape.gradient(value_loss, self.critic.trainable_variables)
+                    #print("GRADS: ", grads)
+                    self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
+                    del tape
+            self.save_models()
+            # self.train_lock.release()
+            print("Done Training")
+            return self.actor.get_weights(), self.critic.get_weights()
 
     def shuffle_ep_dic(self, ep_dic):
         seed = random.random()
@@ -134,6 +140,7 @@ class PPOModel:
 
 
     def load_models(self):
+        print("LOADING MODELS")
         self.actor = tf.keras.models.load_model("actor_model.h5")
         self.critic = tf.keras.models.load_model("critic_model.h5")
         self.optimizer = tf.keras.optimizers.Adam()

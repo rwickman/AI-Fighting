@@ -58,8 +58,10 @@ public class Health : MonoBehaviour
         print("DEAD!");
         //player.isMoveable = false;
         yield return new WaitForSeconds(deathTime);
-        if (gameObject.name != "Agent")
+        if (gameObject.tag == "Enemy")
         {
+            gameObject.GetComponent<Enemy>().enabled = false;
+            gameObject.GetComponent<AIView>().enabled = false;
             //Destroy(gameObject);
         }
         else

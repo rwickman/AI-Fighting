@@ -26,8 +26,6 @@ class AgentWorker:
                 global_actor_weights, global_critic_weights = self.ppo_model.train(ep_dic)
                 self.local_actor.set_weights(global_actor_weights)
                 self.local_critic.set_weights(global_critic_weights)
-
-                print("Done Training")
                 end_msg = "0" * 3
                 endLenStr = str(len(end_msg))
                 endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr

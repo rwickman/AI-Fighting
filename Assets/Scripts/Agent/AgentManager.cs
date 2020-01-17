@@ -55,6 +55,7 @@ public class AgentManager : MonoBehaviour
                 enemies.Add(child.gameObject);
                 enemiesHealth.Add(child.gameObject.GetComponent<Health>());
                 enemiesInitState.Add(CreateInitGOState(child.gameObject));
+                
             }
             else if (child.tag == "Player")
             {
@@ -126,6 +127,8 @@ public class AgentManager : MonoBehaviour
             InitGOState curState = enemiesInitState[i];
             enemies[i].transform.position = new Vector3(curState.position.x, curState.position.y, curState.position.z);
             enemies[i].transform.rotation = new Quaternion(curState.rotation.x, curState.rotation.y, curState.rotation.z, curState.rotation.w);
+            enemies[i].GetComponent<Enemy>().enabled = true;
+            enemies[i].GetComponent<AIView>().enabled = true;
             enemiesHealth[i].health = enemiesHealth[i].startingHealth;
             enemiesHealth[i].ResetHealthSlider();
         }
