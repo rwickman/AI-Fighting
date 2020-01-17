@@ -41,9 +41,11 @@ public class AgentManager : MonoBehaviour
     public bool shouldRestart = false;
     
     private bool lastRewardApplied = false;
-    
+    private float agentFellOutOfMapThreshold;
+
     void Awake()
     {
+        agentFellOutOfMapThreshold = transform.position.y - 10f;
         enemies = new List<GameObject>();
         enemiesHealth = new List<Health>();
         enemiesInitState = new List<InitGOState>();
@@ -76,7 +78,7 @@ public class AgentManager : MonoBehaviour
         }
         else if (!lastRewardApplied)
         {
-            if (agentHealth.health <= 0)
+            if (agentHealth.health <= 0 || agent.transform.position.y < agentFellOutOfMapThreshold)
             {
                 UpdateReward(RewardType.Lost);
                 lastRewardApplied = true;
@@ -138,7 +140,8 @@ public class AgentManager : MonoBehaviour
 
     public void UpdateReward(RewardType reward)
     {
-        currentReward += (int)reward;
+        if (!lastRewardApplied)
+            currentReward += (int)reward;
     }
 
 
