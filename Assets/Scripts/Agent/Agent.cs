@@ -12,7 +12,7 @@ public class Agent : MonoBehaviour
     public float jumpForce = 250f;
     public float jumpDelay = 1f;
 
-    private float jumpElapsedTime = 0f;
+    public float jumpElapsedTime = 0f;
     
     private float minVelocityMag = 0.5f;
     private Rigidbody rigidbody;

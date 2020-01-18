@@ -18,7 +18,7 @@ public class StateCapture : MonoBehaviour
 
    
     
-
+    private Agent agent;
     private Health agentHealth;
     private Sword agentSword;
     private AgentManager agentManager;
@@ -35,6 +35,7 @@ public class StateCapture : MonoBehaviour
         // Ignroe this AI layers
         layerMask = 1 << 8;
         layerMask = ~layerMask;
+        agent = GetComponent<Agent>();
         agentHealth = GetComponent<Health>();
         agentSword = GetComponentInChildren<Sword>();
         agentManager = GetComponentInParent<AgentManager>();
@@ -157,12 +158,14 @@ public class StateCapture : MonoBehaviour
         stateFeatures.Add(transform.position.x);
         stateFeatures.Add(transform.position.y);
         stateFeatures.Add(transform.position.z);
-        stateFeatures.Add(transform.rotation.x);
-        stateFeatures.Add(transform.rotation.y);
-        stateFeatures.Add(transform.rotation.z);
-        stateFeatures.Add(transform.rotation.w);
+        //print("ROT X: " + transform.eulerAngles.x + " ROT Y: " + transform.eulerAngles.y + " ROT Z: " + transform.eulerAngles.z);
+        stateFeatures.Add(transform.eulerAngles.x);
+        stateFeatures.Add(transform.eulerAngles.y);
+        stateFeatures.Add(transform.eulerAngles.z);
+        //stateFeatures.Add(transform.rotation.w);
         stateFeatures.Add(agentHealth.health);
         stateFeatures.Add(agentSword.attackElapsedTime);
+        stateFeatures.Add(agent.jumpElapsedTime);
     }
 
     void AddEnvironmentStateFeatures(GameObject raycastedObject)
@@ -183,11 +186,11 @@ public class StateCapture : MonoBehaviour
         stateFeatures.Add(raycastedObject.transform.position.x);
         stateFeatures.Add(raycastedObject.transform.position.y);
         stateFeatures.Add(raycastedObject.transform.position.z);
-        stateFeatures.Add(raycastedObject.transform.rotation.x);
-        stateFeatures.Add(raycastedObject.transform.rotation.y);
-        stateFeatures.Add(raycastedObject.transform.rotation.z);
-        stateFeatures.Add(raycastedObject.transform.rotation.w);
-        stateFeatures.Add(Vector3.Distance(raycastedObject.transform.position, raycastedObject.transform.position));
+        stateFeatures.Add(raycastedObject.transform.eulerAngles.x);
+        stateFeatures.Add(raycastedObject.transform.eulerAngles.y);
+        stateFeatures.Add(raycastedObject.transform.eulerAngles.z);
+        //stateFeatures.Add(raycastedObject.transform.rotation.w);
+        stateFeatures.Add(Vector3.Distance(transform.position, raycastedObject.transform.position));
     }
 
     void AddEmptyStateFeatures()
