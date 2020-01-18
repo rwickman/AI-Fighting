@@ -149,10 +149,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4021256138892306853}
     m_Modifications:
-    - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
-      propertyPath: shouldSendState
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,13 +211,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8242867509557520702, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
-      propertyPath: pitchMin
-      value: -30
+      propertyPath: pitchMax
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8242867509557520702, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
-      propertyPath: pitchMax
-      value: 30
+      propertyPath: pitchMin
+      value: -80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242867509557520702, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
+        type: 3}
+      propertyPath: jumpForce
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}

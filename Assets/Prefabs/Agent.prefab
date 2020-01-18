@@ -136,6 +136,7 @@ MonoBehaviour:
   deathTime: 0.1
   alertTime: 2
   hurtTime: 10
+  startingHealth: 0
 --- !u!114 &5395584666427922735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,12 +162,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acfa58ca770ba8d18d8a2c8adb93d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 6
   isMoveable: 1
   jumpForce: 250
   jumpDelay: 1
-  speedH: 2
-  speedV: 2
+  speedH: 3
+  speedV: 3
   pitchMin: -90
   pitchMax: 90
 --- !u!114 &31093661
@@ -182,7 +183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numRaycast: 30
-  shouldSendState: 0
+  shouldSendState: 1
+  sentEpisodeOver: 0
 --- !u!114 &31093662
 MonoBehaviour:
   m_ObjectHideFlags: 0

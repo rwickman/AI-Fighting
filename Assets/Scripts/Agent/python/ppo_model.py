@@ -8,7 +8,19 @@ import threading
 
 
 class PPOModel:
-    def __init__(self, num_states, should_load_model=False, num_actions=6 , hidden_size=52, num_hidden_layers = 2, epsilon_clip=0.1, gamma=0.99, lam=0.95, entropy_coeff=0.0, clip_param=0.1, epochs=5):
+    def __init__(self,
+            num_states,
+            should_load_model=False,
+            num_actions=6 ,
+            hidden_size=52,
+            num_hidden_layers = 2,
+            epsilon_clip=0.1,
+            gamma=0.99,
+            lam=0.95,
+            entropy_coeff=0.0,
+            clip_param=0.1,
+            epochs=5,
+            use_conv = False):
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
@@ -17,6 +29,7 @@ class PPOModel:
         self.var = 1.0
         self.epsilon_clip = epsilon_clip
         self.distribution = NormalDistribution()
+        self.use_conv = use_conv
         if should_load_model:
             self.load_models()
         else:
@@ -43,11 +56,24 @@ class PPOModel:
 
     
     def build_actor_and_critic(self):
-        self.build_actor()
-        self.build_critic()
+        if self.use_conv:
+            self.build_actor_conv()
+            self.build_critic_conv()
+            print("Building CNN.")
+        else:
+            self.build_actor()
+            self.build_critic()
         self.optimizer = tf.keras.optimizers.Adam()
         self.actor.summary()
         self.critic.summary()
+
+    def build_actor(self):
+        inputs = tf.keras.Input(shape=(self.num_states,))
+        x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
+        for _ in range(self.num_hidden_layers - 1):
+            x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
+        out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
+        self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
 
     def build_critic(self):
         inputs = tf.keras.Input(shape=(self.num_states,))
@@ -57,13 +83,19 @@ class PPOModel:
         out_critic = tf.keras.layers.Dense(1)(x)
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
 
-    def build_actor(self):
-        inputs = tf.keras.Input(shape=(self.num_states,))
-        x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
-        for _ in range(self.num_hidden_layers - 1):
-            x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
-        out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
+    def build_actor_conv(self):
+        inputs = tf.keras.Input(shape=(self.num_states,1,1))
+        x = tf.keras.layers.Conv2D(filters=16, kernel_size=(8,8), strides=(4,4), padding="VALID", activation="relu")(inputs)
+        x = tf.keras.layers.Conv2D(filters=32, kernel_size=(4,4), strides=(2,2), padding="VALID", activation="relu")(x)
+        out_actor = tf.keras.layers.Dense(self.num_actions, activation="linear", kernel_initializer=tf.random_normal_initializer())(x)
         self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
+
+    def build_critic_conv(self):
+        inputs = tf.keras.Input(shape=(self.num_states,1,1))
+        x = tf.keras.layers.Conv2D(filters=16, kernel_size=(8,8), strides=(4,4), padding="VALID", activation="relu")(inputs)
+        x = tf.keras.layers.Conv2D(filters=32, kernel_size=(4,4), strides=(2,2), padding="VALID", activation="relu")(x)
+        out_critic = tf.keras.layers.Dense(1, activation="linear", kernel_initializer=tf.random_normal_initializer())(x)
+        self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
 
 
     def next_action_and_value(self, observ):
@@ -137,14 +169,22 @@ class PPOModel:
         return total_loss, value_fn_loss
     
     def save_models(self):
-        self.actor.save("actor_model.h5")
-        self.critic.save("critic_model.h5")
+        if self.use_conv:
+            self.actor.save("actor_model_conv.h5")
+            self.critic.save("critic_model_conv.h5")
+        else:
+            self.actor.save("actor_model.h5")
+            self.critic.save("critic_model.h5")
 
 
     def load_models(self):
         print("LOADING MODELS")
-        self.actor = tf.keras.models.load_model("actor_model.h5")
-        self.critic = tf.keras.models.load_model("critic_model.h5")
+        if self.use_conv:
+            self.actor = tf.keras.models.load_model("actor_model_conv.h5")
+            self.critic = tf.keras.models.load_model("critic_model_conv.h5")
+        else:
+            self.actor = tf.keras.models.load_model("actor_model.h5")
+            self.critic = tf.keras.models.load_model("critic_model.h5")
         self.optimizer = tf.keras.optimizers.Adam()
         self.actor.summary()
         self.critic.summary()
