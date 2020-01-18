@@ -112,12 +112,15 @@ public class Agent : MonoBehaviour
 
     void Look(float yawMove, float pitchMove)
     {
+        //Debug.Log("YAW: " + yawMove);
+        //Debug.Log("PITCH: " + pitchMove);
         yaw += speedH * yawMove;
         pitch -= speedV * pitchMove;
+        //Debug.Log("OVERALL PITCH: " + pitch);
         
         //the rotation range
         pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
-
+        //Debug.Log("OVERALL PITCH AFTER UPDATE: " + pitch);
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 

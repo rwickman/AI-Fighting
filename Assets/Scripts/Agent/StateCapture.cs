@@ -11,7 +11,7 @@ public class StateCapture : MonoBehaviour
     public bool shouldSendState = false;
     [HideInInspector]
     public bool sentEpisodeOver = false;
-    
+    public bool showDebugRays = false;    
      private bool hasStarted = false;
     private const int numSubFeatures = 10;
     private int layerMask;
@@ -114,7 +114,7 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(dir);
             }
         }
-        //print("TOTAL: " + stateFeatures.Count);
+        // print("TOTAL: " + stateFeatures.Count);
     }
 
     void SendState()
@@ -129,14 +129,18 @@ public class StateCapture : MonoBehaviour
         agentManager.ResetReward();
         string jsonStr = JsonConvert.SerializeObject(dict);
         policy_con.SendState(jsonStr);
+        agentManager.curTimeStep += 1;
     }
 
 
     void RaycastSubState(Vector3 dir)
     {
         RaycastHit hit;
-
-        //Debug.DrawRay(transform.position, dir*2, Color.magenta);
+        if (showDebugRays)
+        {
+            Debug.DrawRay(transform.position, dir*2, Color.magenta);
+        }
+        
         if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))
         {
             AddEnvironmentStateFeatures(hit.collider.gameObject);

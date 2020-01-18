@@ -1,10 +1,9 @@
 "Based on https://github.com/openai/baselines/blob/master/baselines/ppo1/pposgd_simple.py"
 
+import random, threading, json
 import tensorflow as tf
 import numpy as np
-import random
 from normal_distribution import NormalDistribution
-import threading
 
 
 class PPOModel:
@@ -12,7 +11,7 @@ class PPOModel:
             num_states,
             should_load_model=False,
             num_actions=6 ,
-            hidden_size=52,
+            hidden_size=64,
             num_hidden_layers = 2,
             epsilon_clip=0.1,
             gamma=0.99,
@@ -21,6 +20,7 @@ class PPOModel:
             clip_param=0.1,
             epochs=5,
             use_conv = False):
+        self.training_json = "training.json"
         self.num_states = num_states
         self.num_actions = num_actions
         self.hidden_size = hidden_size
@@ -66,13 +66,14 @@ class PPOModel:
         self.optimizer = tf.keras.optimizers.Adam()
         self.actor.summary()
         self.critic.summary()
+        self.training_info = {"episode" : 0}
 
     def build_actor(self):
         inputs = tf.keras.Input(shape=(self.num_states,))
         x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
         for _ in range(self.num_hidden_layers - 1):
             x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
-        out_actor = tf.keras.layers.Dense(self.num_actions, activation="tanh")(x)
+        out_actor = tf.keras.layers.Dense(self.num_actions, kernel_initializer=tf.random_normal_initializer())(x)
         self.actor = tf.keras.models.Model(inputs=[inputs], outputs=[out_actor])
 
     def build_critic(self):
@@ -80,7 +81,7 @@ class PPOModel:
         x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(inputs)
         for _ in range(self.num_hidden_layers - 1):
             x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
-        out_critic = tf.keras.layers.Dense(1)(x)
+        out_critic = tf.keras.layers.Dense(1, kernel_initializer=tf.random_normal_initializer())(x)
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
 
     def build_actor_conv(self):
@@ -135,6 +136,7 @@ class PPOModel:
                     #print("GRADS: ", grads)
                     self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
                     del tape
+            self.training_info["episode"] += 1
             self.save_models()
             # self.train_lock.release()
             print("Done Training")
@@ -175,7 +177,8 @@ class PPOModel:
         else:
             self.actor.save("actor_model.h5")
             self.critic.save("critic_model.h5")
-
+        with open(self.training_json, "w") as f:
+            json.dump(self.training_info, f)
 
     def load_models(self):
         print("LOADING MODELS")
@@ -188,6 +191,9 @@ class PPOModel:
         self.optimizer = tf.keras.optimizers.Adam()
         self.actor.summary()
         self.critic.summary()
+
+        with open(self.training_json, "r") as f:
+            self.training_info = json.load(f)
 
     # def update_old_model(self):
     #     self.actor_old = tf.keras.models.clone_model(self.actor)

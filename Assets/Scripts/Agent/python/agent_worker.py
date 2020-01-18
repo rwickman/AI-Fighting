@@ -31,7 +31,6 @@ class AgentWorker:
                 endLenStr = (self.header_len - len(endLenStr)) * "0" + endLenStr
                 conn.send(endLenStr.encode())
                 conn.send(end_msg.encode())
-                print("Sent Last")
 
 
     def run_episode(self, conn):

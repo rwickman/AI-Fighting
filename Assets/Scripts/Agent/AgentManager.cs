@@ -22,8 +22,10 @@ public class AgentManager : MonoBehaviour
         public Quaternion rotation;
     }
     
-    public int numEpisodes;
+    //public int numEpisodes;
     public string enemyTag = "Enemy";
+    public int maxTimeSteps = 600;
+    public int curTimeStep = 0;
     private int currentReward;
 
     private GameObject agent;
@@ -37,7 +39,6 @@ public class AgentManager : MonoBehaviour
     private List<Enemy> enemiesEnemy;
     private List<AIView> enemiesView;
 
-    
     //private int pointsToWin;
 
     public bool isEpisodeOver = false;
@@ -84,7 +85,7 @@ public class AgentManager : MonoBehaviour
         }
         else if (!lastRewardApplied)
         {
-            if (agentHealth.health <= 0 || agent.transform.position.y < agentFellOutOfMapThreshold)
+            if (agentHealth.health <= 0 || agent.transform.position.y < agentFellOutOfMapThreshold || curTimeStep > maxTimeSteps)
             {
                 UpdateReward(RewardType.Lost);
                 lastRewardApplied = true;
@@ -129,6 +130,7 @@ public class AgentManager : MonoBehaviour
     
     public void RestartEpisode()
     {
+        curTimeStep = 0;
         shouldRestart = false;
         ResetReward();
         lastRewardApplied = false;

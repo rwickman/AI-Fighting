@@ -164,12 +164,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   isMoveable: 1
-  jumpForce: 250
+  jumpForce: 50
   jumpDelay: 1
   speedH: 3
   speedV: 3
-  pitchMin: -90
-  pitchMax: 90
+  pitchMin: -80
+  pitchMax: 80
 --- !u!114 &31093661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,9 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280c6021773a04943a802913c00d194e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRaycast: 30
+  numRaycast: 10
   shouldSendState: 1
   sentEpisodeOver: 0
+  showDebugRays: 0
 --- !u!114 &31093662
 MonoBehaviour:
   m_ObjectHideFlags: 0
