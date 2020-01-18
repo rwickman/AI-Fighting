@@ -34,6 +34,9 @@ public class AgentManager : MonoBehaviour
     private List<GameObject> enemies;
     private List<Health> enemiesHealth;
     private List<InitGOState> enemiesInitState;
+    private List<Enemy> enemiesEnemy;
+    private List<AIView> enemiesView;
+
     
     //private int pointsToWin;
 
@@ -49,6 +52,8 @@ public class AgentManager : MonoBehaviour
         enemies = new List<GameObject>();
         enemiesHealth = new List<Health>();
         enemiesInitState = new List<InitGOState>();
+        enemiesEnemy = new List<Enemy>();
+        enemiesView = new List<AIView>();
 
         foreach (Transform child in transform)
         {
@@ -57,7 +62,8 @@ public class AgentManager : MonoBehaviour
                 enemies.Add(child.gameObject);
                 enemiesHealth.Add(child.gameObject.GetComponent<Health>());
                 enemiesInitState.Add(CreateInitGOState(child.gameObject));
-                
+                enemiesEnemy.Add(child.gameObject.GetComponent<Enemy>());
+                enemiesView.Add(child.gameObject.GetComponent<AIView>());
             }
             else if (child.tag == "Player")
             {
@@ -83,6 +89,7 @@ public class AgentManager : MonoBehaviour
                 UpdateReward(RewardType.Lost);
                 lastRewardApplied = true;
                 isEpisodeOver = true;
+                TurnOffEnemies();
             }
             else if (AllEnemiesDead())
             {
@@ -110,6 +117,15 @@ public class AgentManager : MonoBehaviour
         }
         return true;
     }
+
+    private void TurnOffEnemies()
+    {
+        for (int i = 0; i < enemiesView.Count; i++)
+        {
+            enemiesEnemy[i].enabled = false;
+            enemiesView[i].enabled = false;
+        }
+    }
     
     public void RestartEpisode()
     {
@@ -129,8 +145,8 @@ public class AgentManager : MonoBehaviour
             InitGOState curState = enemiesInitState[i];
             enemies[i].transform.position = new Vector3(curState.position.x, curState.position.y, curState.position.z);
             enemies[i].transform.rotation = new Quaternion(curState.rotation.x, curState.rotation.y, curState.rotation.z, curState.rotation.w);
-            enemies[i].GetComponent<Enemy>().enabled = true;
-            enemies[i].GetComponent<AIView>().enabled = true;
+            enemiesEnemy[i].enabled = true;
+            enemiesView[i].enabled = true;
             enemiesHealth[i].health = enemiesHealth[i].startingHealth;
             enemiesHealth[i].ResetHealthSlider();
         }

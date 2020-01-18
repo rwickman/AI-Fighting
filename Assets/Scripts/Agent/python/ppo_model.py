@@ -89,8 +89,10 @@ class PPOModel:
     def train(self, ep_dic):
         with self.train_lock:
             print("Training")
+            epoch_bonus = 5 if ep_dic["rewards"][-1] > 0 else 0 
+            print("BONUS: ", epoch_bonus, " REWARD: ", ep_dic["rewards"][-1])
             self.shuffle_ep_dic(ep_dic)
-            for _ in range(self.epochs):
+            for _ in range(self.epochs + epoch_bonus):
                 for i in range(len(ep_dic["observations"])):
                     with tf.GradientTape(persistent=True) as tape:
                         policy_loss, value_loss = self.ppo_loss(ep_dic, i)
