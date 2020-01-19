@@ -22,7 +22,7 @@ class TrainModel:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.bind(("", self.port))
-            s.listen(6)
+            s.listen(20)
             print("Starting accepting")
             while True:
                 print("WAITING TO ACCEPT")

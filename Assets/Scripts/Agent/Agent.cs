@@ -55,6 +55,12 @@ public class Agent : MonoBehaviour
     {
         this.actionDic = actionDic;
         actionPerformed = false;
+        Debug.Log("ATTACK: " + actionDic["attack"]);
+        /*
+        foreach (KeyValuePair<string, float> kvp in actionDic)
+        {
+            Debug.Log(string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
+        }*/
     }
 
     // Update is called once per frame

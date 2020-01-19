@@ -100,7 +100,7 @@ public class AgentManager : MonoBehaviour
             }
             else {
                 // For each frame add negative 
-                UpdateReward(RewardType.GameInProgress);
+                //UpdateReward(RewardType.GameInProgress);
             }
         }
         
