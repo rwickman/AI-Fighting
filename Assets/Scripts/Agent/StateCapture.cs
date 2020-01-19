@@ -13,7 +13,7 @@ public class StateCapture : MonoBehaviour
     public bool sentEpisodeOver = false;
     public bool showDebugRays = false;    
      private bool hasStarted = false;
-    private const int numSubFeatures = 10;
+    private const int numSubFeatures = 9;
     private int layerMask;
 
    
@@ -76,17 +76,18 @@ public class StateCapture : MonoBehaviour
             angle += 2 * Mathf.PI / numRaycast;
 
             Vector3 localForward = transform.TransformDirection(transform.forward);
-            Vector3 dir1 = new Vector3(localForward.x + x_angle, 0, localForward.y + y_angle); // Used for horizontally around body (think hoola hoop)
-            Vector3 dir2 = new Vector3(localForward.x + x_angle, localForward.y + y_angle, 0); // Verticall aroudn body
-            Vector3 dir3 = new Vector3(0, localForward.y + y_angle, localForward.x + x_angle); 
+            Vector3 dir1 = new Vector3(localForward.x + x_angle, 0, localForward.y + y_angle);
+            Vector3 dir2 = new Vector3(localForward.x + x_angle, localForward.y + y_angle, 0);
+            Vector3 dir3 = new Vector3(0, localForward.y + y_angle, localForward.x + x_angle);
             // The angled raycast directions 
             Vector3 dir4 = Quaternion.AngleAxis(45, Vector3.right) * dir1;
             Vector3 dir5 = Quaternion.AngleAxis(-45, Vector3.right) * dir1;
             Vector3 dir6= Quaternion.AngleAxis(-90, Vector3.up) * dir5;
             Vector3 dir7 = Quaternion.AngleAxis(90, Vector3.up) * dir5;
+            Vector3 dir8 = new Vector3(localForward.x + x_angle/4, localForward.y + y_angle/4, localForward.z);
 
             // Remove duplicate rays (there is probably a better way to do this but oh well)
-            Vector3[] dirs = { dir1, dir2, dir3, dir4, dir5, dir6, dir7 };
+            Vector3[] dirs = { dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8};
             /*
             List<Vector3> dirs_non_duplicates = new List<Vector3>();
             
@@ -115,7 +116,7 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(dir);
             }
         }
-        // print("TOTAL: " + stateFeatures.Count);
+        //print("TOTAL: " + stateFeatures.Count);
     }
 
     void SendState()
