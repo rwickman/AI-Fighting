@@ -119,7 +119,7 @@ public class Agent : MonoBehaviour
         //Debug.Log("OVERALL PITCH: " + pitch);
         
         //the rotation range
-        pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
+        //pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
         //Debug.Log("OVERALL PITCH AFTER UPDATE: " + pitch);
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
