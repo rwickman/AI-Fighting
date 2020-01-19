@@ -173,7 +173,7 @@ public class StateCapture : MonoBehaviour
     {
         int tagID = GetTagID(raycastedObject.tag);
         bool isHuman = tagID == 1 || tagID == 2;
-        
+        //print(raycastedObject.tag);
         stateFeatures.Add(tagID);
         if (isHuman)
         {

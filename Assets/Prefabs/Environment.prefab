@@ -46,8 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bded3a9bba16ddd89cd847cc5ffcc54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numEpisodes: 0
   enemyTag: Enemy
+  maxTimeSteps: 600
+  curTimeStep: 0
   isEpisodeOver: 0
   shouldRestart: 0
 --- !u!1001 &4021256138580246812
@@ -116,16 +117,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Agent
-      objectReference: {fileID: 0}
-    - target: {fileID: 8242867509557520702, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: speedH
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8242867509557520702, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
-        type: 3}
-      propertyPath: speedV
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
