@@ -120,11 +120,22 @@ class PPOModel:
         ep_dic["tdlamret"] = ep_dic["adv"] + ep_dic["values"]
         ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
     
+    def add_ret_and_adv(self, ep_dic):
+        T = len(ep_dic["rewards"])
+        ep_dic["adv"] = np.empty(T, 'float32')
+        ep_dic["returns"] = np.empty(T, 'float32')
+        for t in range(T-1, -1, -1):
+            ep_dic["returns"][t] = ep_dic["rewards"][t]
+            if t < T-1:
+                ep_dic["returns"][t] += ep_dic["returns"][t+1] * self.gamma
+        ep_dic["adv"] = ep_dic["returns"] - ep_dic["values"]
+
     def train(self, ep_dic):
         with self.train_lock:
             print("Training")
             print("Rewards: ", ep_dic["rewards"])
-            print("tdlamret: ", ep_dic["tdlamret"])
+            print("Returns: ", ep_dic["returns"])
+            print("Values: ", ep_dic["values"])
             epoch_bonus = 5 if ep_dic["rewards"][-1] > 0 else 0 
             print("BONUS: ", epoch_bonus, " REWARD: ", ep_dic["rewards"][-1])
             self.shuffle_ep_dic(ep_dic)
@@ -169,8 +180,9 @@ class PPOModel:
         surrogate_1 = ratio * ep_dic["adv"][index]
         surrogate_2 = tf.clip_by_value(ratio, 1.0 - self.epsilon_clip, 1.0 + self.epsilon_clip) * ep_dic["adv"][index]
         policy_surrogate = - tf.reduce_mean(tf.minimum(surrogate_1, surrogate_2))
-        value_fn_loss = tf.reduce_mean(tf.square(ep_dic["tdlamret"][index] - cur_val))
-        total_loss = policy_surrogate + policy_entropy_pen + value_fn_loss
+        #value_fn_loss = tf.reduce_mean(tf.square(ep_dic["tdlamret"][index] - cur_val))
+        value_fn_loss = tf.reduce_mean(tf.square(ep_dic["returns"][index] - cur_val))
+        total_loss = policy_surrogate + policy_entropy_pen 
         return total_loss, value_fn_loss
     
     def save_models(self):

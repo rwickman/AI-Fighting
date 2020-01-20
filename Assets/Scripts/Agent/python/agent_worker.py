@@ -17,10 +17,11 @@ class AgentWorker:
         with conn:
             while True:
                 ep_dic = self.run_episode(conn)
-                self.ppo_model.add_vtarg_and_adv(ep_dic)
+                #self.ppo_model.add_vtarg_and_adv(ep_dic)
+                self.ppo_model.add_ret_and_adv(ep_dic)
                 # print("ADVANTAGE: ", ep_dic["adv"])
                 # print("TDLAMRET", ep_dic["tdlamret"])
-                print("REWARDS: ", ep_dic["rewards"])
+                #print("REWARDS: ", ep_dic["rewards"])
                 # self.ppo_model.update_old_model()
                 #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
                 global_actor_weights, global_critic_weights = self.ppo_model.train(ep_dic)
