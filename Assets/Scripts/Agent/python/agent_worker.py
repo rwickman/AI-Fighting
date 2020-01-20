@@ -15,15 +15,12 @@ class AgentWorker:
 
     def start_training_agent(self, conn):
         with conn:
+            self.set_should_explore(conn)
             while True:
                 ep_dic = self.run_episode(conn)
                 #self.ppo_model.add_vtarg_and_adv(ep_dic)
+    
                 self.ppo_model.add_ret_and_adv(ep_dic)
-                # print("ADVANTAGE: ", ep_dic["adv"])
-                # print("TDLAMRET", ep_dic["tdlamret"])
-                #print("REWARDS: ", ep_dic["rewards"])
-                # self.ppo_model.update_old_model()
-                #print("LOSS: ", self.ppo_model.train(ep_dic, 0))
                 global_actor_weights, global_critic_weights = self.ppo_model.train(ep_dic)
                 self.local_actor.set_weights(global_actor_weights)
                 self.local_critic.set_weights(global_critic_weights)
@@ -55,7 +52,6 @@ class AgentWorker:
                 break
             
             env_dic = json.loads(data)
-
             state_arr = np.array(env_dic["state"])
             state_arr = np.reshape(state_arr, (1, state_arr.shape[0]))
             observs.append(state_arr)
@@ -65,11 +61,13 @@ class AgentWorker:
             
             #print(env_dic["reward"])
             action, val = self.next_action_and_value(state_arr)
+            actions.append(action)
+            #print(action)
             action = action.numpy()[0]
             # print("action: ", action)
-            # print("value:", val[0])
-            val_preds.append(val[0])
-            actions.append(action)
+            #print("value:", val)
+            
+            val_preds.append(val)
             means.append(self.distribution.mean)
 
             if env_dic["done"]:
@@ -94,8 +92,11 @@ class AgentWorker:
 
     def next_action_and_value(self, observ):
         self.distribution.mean = self.local_actor(observ)
-        return self.distribution.sample(), self.local_critic(observ)
-   
+        if self.should_explore:
+            return self.distribution.sample(), self.local_critic(observ)
+        else:
+            return self.distribution.mean, self.local_critic(observ)
+
     def format_action(self, action):
         action_dic = {
             "vertical" : action[0],
@@ -106,4 +107,13 @@ class AgentWorker:
             "attack" : action[5]
         }
         return json.dumps(action_dic)
-        
+    
+    def set_should_explore(self, conn):
+        data_header = conn.recv(self.header_len)
+        data_len = int(data_header.decode().rstrip("\x00"))
+        data = conn.recv(data_len, socket.MSG_WAITALL)
+        if not data:
+            return
+        explore_dic = json.loads(data)
+        self.should_explore = explore_dic["explore"]
+

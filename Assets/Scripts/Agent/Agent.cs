@@ -56,11 +56,11 @@ public class Agent : MonoBehaviour
         this.actionDic = actionDic;
         actionPerformed = false;
         Debug.Log("ATTACK: " + actionDic["attack"]);
-        /*
-        foreach (KeyValuePair<string, float> kvp in actionDic)
-        {
-            Debug.Log(string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
-        }*/
+        
+        // foreach (KeyValuePair<string, float> kvp in actionDic)
+        // {
+        //     Debug.Log(string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
+        // }
     }
 
     // Update is called once per frame
@@ -126,7 +126,7 @@ public class Agent : MonoBehaviour
         
         //the rotation range
         //pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
-        //Debug.Log("OVERALL PITCH AFTER UPDATE: " + pitch);
+        //Debug.Log("pitch: " + pitch + " yaw: " + yaw);
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 

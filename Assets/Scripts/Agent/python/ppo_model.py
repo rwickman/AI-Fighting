@@ -136,13 +136,14 @@ class PPOModel:
             print("Rewards: ", ep_dic["rewards"])
             print("Returns: ", ep_dic["returns"])
             print("Values: ", ep_dic["values"])
-            epoch_bonus = 5 if ep_dic["rewards"][-1] > 0 else 0 
+            epoch_bonus = 0#5 if ep_dic["rewards"][-1] > 0 else 0 
             print("BONUS: ", epoch_bonus, " REWARD: ", ep_dic["rewards"][-1])
             self.shuffle_ep_dic(ep_dic)
             for _ in range(self.epochs + epoch_bonus):
                 for i in range(len(ep_dic["observations"])):
                     with tf.GradientTape(persistent=True) as tape:
                         policy_loss, value_loss = self.ppo_loss(ep_dic, i)
+                    #print("VALUE LOSS: ", value_loss)
                     grads = tape.gradient(policy_loss, self.actor.trainable_variables)
                     #print("GRADS: ", grads)
                     self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
@@ -152,7 +153,6 @@ class PPOModel:
                     del tape
             self.training_info["episode"] += 1
             self.save_models()
-            # self.train_lock.release()
             print("Done Training")
             return self.actor.get_weights(), self.critic.get_weights()
 
@@ -167,7 +167,7 @@ class PPOModel:
         return tf.reduce_mean(tf.square(ret - value))
 
     def ppo_loss(self, ep_dic, index):
-        cur_action, cur_val = self.next_action_and_value(ep_dic["observations"][index])
+        _, cur_val = self.next_action_and_value(ep_dic["observations"][index])
 
         old_distribution = NormalDistribution(mean=ep_dic["means"][index])
         kl_divergence = self.distribution.kl(old_distribution)
@@ -175,13 +175,16 @@ class PPOModel:
         mean_kl = tf.reduce_mean(kl_divergence)
         mean_entropy = tf.reduce_mean(entropy)
         policy_entropy_pen = -self.entropy_coeff * mean_entropy
-
-        ratio = tf.exp(self.distribution.neglogp(cur_action) - old_distribution.neglogp(cur_action))
+        ratio = tf.exp(self.distribution.logp(ep_dic["actions"][index]) - old_distribution.logp(ep_dic["actions"][index]))
         surrogate_1 = ratio * ep_dic["adv"][index]
         surrogate_2 = tf.clip_by_value(ratio, 1.0 - self.epsilon_clip, 1.0 + self.epsilon_clip) * ep_dic["adv"][index]
         policy_surrogate = - tf.reduce_mean(tf.minimum(surrogate_1, surrogate_2))
         #value_fn_loss = tf.reduce_mean(tf.square(ep_dic["tdlamret"][index] - cur_val))
+        
         value_fn_loss = tf.reduce_mean(tf.square(ep_dic["returns"][index] - cur_val))
+        #print("CUR VAL: ", cur_val)
+        #print(ep_dic["returns"][index] - cur_val)
+        #print("VALUE LOSS: ", value_fn_loss)
         total_loss = policy_surrogate + policy_entropy_pen 
         return total_loss, value_fn_loss
     

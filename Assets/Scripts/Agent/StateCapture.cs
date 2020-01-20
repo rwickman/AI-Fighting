@@ -12,7 +12,9 @@ public class StateCapture : MonoBehaviour
     [HideInInspector]
     public bool sentEpisodeOver = false;
     public bool showDebugRays = false;    
-     private bool hasStarted = false;
+    public bool shouldExplore = true;
+    private bool hasStarted = false;
+    private bool sentExplorationSetting = false;
     private const int numSubFeatures = 9;
     private int layerMask;
 
@@ -51,6 +53,11 @@ public class StateCapture : MonoBehaviour
             policy_con.StartConnection(ResetShouldSendState);
             hasStarted = true;
         }
+        if (!sentExplorationSetting)
+        {
+            SendExplorationSetting();
+            sentExplorationSetting = true;
+        }
         if (shouldSendState && !sentEpisodeOver)
         {
             RaycastState();
@@ -76,18 +83,24 @@ public class StateCapture : MonoBehaviour
             angle += 2 * Mathf.PI / numRaycast;
 
             Vector3 localForward = transform.TransformDirection(transform.forward);
-            Vector3 dir1 = new Vector3(localForward.x + x_angle, 0, localForward.y + y_angle);
-            Vector3 dir2 = new Vector3(localForward.x + x_angle, localForward.y + y_angle, 0);
-            Vector3 dir3 = new Vector3(0, localForward.y + y_angle, localForward.x + x_angle);
-            // The angled raycast directions 
-            Vector3 dir4 = Quaternion.AngleAxis(45, Vector3.right) * dir1;
-            Vector3 dir5 = Quaternion.AngleAxis(-45, Vector3.right) * dir1;
-            Vector3 dir6= Quaternion.AngleAxis(-90, Vector3.up) * dir5;
-            Vector3 dir7 = Quaternion.AngleAxis(90, Vector3.up) * dir5;
+            // Vector3 dir1 = new Vector3(localForward.x + x_angle, 0, localForward.y + y_angle);
+            // Vector3 dir2 = new Vector3(localForward.x + x_angle, localForward.y + y_angle, 0);
+            // Vector3 dir3 = new Vector3(0, localForward.y + y_angle, localForward.x + x_angle);
+            // // The angled raycast directions 
+            // Vector3 dir4 = Quaternion.AngleAxis(45, Vector3.right) * dir1;
+            // Vector3 dir5 = Quaternion.AngleAxis(-45, Vector3.right) * dir1;
+            // Vector3 dir6= Quaternion.AngleAxis(-90, Vector3.up) * dir5;
+            // Vector3 dir7 = Quaternion.AngleAxis(90, Vector3.up) * dir5;
+             //Vector3 dir11 = new Vector3(localForward.x + x_angle/4, localForward.y + y_angle/4, localForward.z);
             Vector3 dir8 = new Vector3(localForward.x + x_angle/4, localForward.y + y_angle/4, localForward.z);
+            Vector3 dir9 = new Vector3(localForward.x + x_angle/6, localForward.y + y_angle/6, localForward.z);
+            Vector3 dir10 = new Vector3(localForward.x + x_angle/10, localForward.y + y_angle/10, localForward.z);
+            Vector3 dir11 = new Vector3(localForward.x + x_angle/40, localForward.y + y_angle/40, localForward.z);
+             //Vector3 dir9 = new Vector3(localForward.x + x_angle/2, localForward.y + y_angle/2, localForward.z);
+
 
             // Remove duplicate rays (there is probably a better way to do this but oh well)
-            Vector3[] dirs = { dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8};
+            Vector3[] dirs = { /*dir1, dir2, dir3, dir4, dir5, dir6, dir7, */dir8, dir9, dir10, dir11};
             /*
             List<Vector3> dirs_non_duplicates = new List<Vector3>();
             
@@ -134,13 +147,21 @@ public class StateCapture : MonoBehaviour
         agentManager.curTimeStep += 1;
     }
 
+    void SendExplorationSetting()
+    {
+        Dictionary<string, bool> dict = new Dictionary<string, bool>();
+        dict["explore"] = shouldExplore;
+        string jsonStr = JsonConvert.SerializeObject(dict);
+        policy_con.SendExplorationSetting(jsonStr);
+    }
+
 
     void RaycastSubState(Vector3 dir)
     {
         RaycastHit hit;
         if (showDebugRays)
         {
-            Debug.DrawRay(transform.position, dir*2, Color.magenta);
+            Debug.DrawRay(transform.position, dir*30, Color.magenta);
         }
         
         if (Physics.Raycast(transform.position, dir, out hit, Mathf.Infinity, layerMask))

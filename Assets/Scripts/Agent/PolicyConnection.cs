@@ -23,7 +23,6 @@ public class PolicyConnection : MonoBehaviour
     private string unixSocket;
     [HideInInspector]
     public delegate void ResetShouldSendState();
-
     private ResetShouldSendState resetSendStateCallback;
 
     private Socket client;
@@ -69,13 +68,29 @@ public class PolicyConnection : MonoBehaviour
     {
         try
         {
-            client.EndConnect(ar);
-            resetSendStateCallback();            
+            client.EndConnect(ar);           
         }
         catch (Exception e)
         {
             Debug.LogError(e.ToString());
         }
+    }
+
+    public void SendExplorationSetting(string jsonStr)
+    {
+        Debug.Log("SendExplorationSetting");
+        byte[] byteData = new byte[headerLength + Encoding.ASCII.GetByteCount(jsonStr)];
+        Encoding.ASCII.GetBytes(jsonStr.Length.ToString()).CopyTo(byteData, 0);
+        Encoding.ASCII.GetBytes(jsonStr).CopyTo(byteData, headerLength);
+
+        client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendExplorationSettingCallback), null);
+    }
+
+    private void SendExplorationSettingCallback(IAsyncResult ar)
+    {
+        Debug.Log("SendExplorationSettingCallback");
+        client.EndSend(ar);
+        resetSendStateCallback();
     }
 
     public void SendState(string jsonStr)
