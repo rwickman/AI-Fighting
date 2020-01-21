@@ -1382,7 +1382,7 @@ PrefabInstance:
     - target: {fileID: 4021256138584830593, guid: b2b3d36fbd06846bca7495fe9c734b4e,
         type: 3}
       propertyPath: showDebugRays
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4021256138892306850, guid: b2b3d36fbd06846bca7495fe9c734b4e,
         type: 3}
@@ -1463,6 +1463,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021256139436387636, guid: b2b3d36fbd06846bca7495fe9c734b4e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4520353464619669751, guid: b2b3d36fbd06846bca7495fe9c734b4e,
         type: 3}

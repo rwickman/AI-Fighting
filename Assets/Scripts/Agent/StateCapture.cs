@@ -82,7 +82,7 @@ public class StateCapture : MonoBehaviour
             float y_angle = Mathf.Sin(angle); 
             angle += 2 * Mathf.PI / numRaycast;
 
-            Vector3 localForward = transform.TransformDirection(transform.forward);
+            Vector3 localForward = transform.forward;
             // Vector3 dir1 = new Vector3(localForward.x + x_angle, 0, localForward.y + y_angle);
             // Vector3 dir2 = new Vector3(localForward.x + x_angle, localForward.y + y_angle, 0);
             // Vector3 dir3 = new Vector3(0, localForward.y + y_angle, localForward.x + x_angle);
