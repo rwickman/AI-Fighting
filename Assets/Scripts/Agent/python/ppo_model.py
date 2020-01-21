@@ -34,6 +34,7 @@ class PPOModel:
             self.load_models()
         else:
             self.build_actor_and_critic()
+        self.critic.compile(optimizer=tf.keras.optimizers.Adam(), loss="mse")
         self.gamma = gamma
         self.lam = lam
         self.entropy_coeff = entropy_coeff
@@ -129,12 +130,13 @@ class PPOModel:
             if t < T-1:
                 ep_dic["returns"][t] += ep_dic["returns"][t+1] * self.gamma
         ep_dic["adv"] = ep_dic["returns"] - ep_dic["values"]
+        #ep_dic["adv"] = (ep_dic["adv"] - ep_dic["adv"].mean()) / ep_dic["adv"].std()
 
     def train(self, ep_dic):
         with self.train_lock:
             print("Training")
             print("Rewards: ", ep_dic["rewards"])
-            print("Returns: ", ep_dic["returns"])
+            print("tdlamret: ", ep_dic["tdlamret"])
             print("Values: ", ep_dic["values"])
             epoch_bonus = 0#5 if ep_dic["rewards"][-1] > 0 else 0 
             print("BONUS: ", epoch_bonus, " REWARD: ", ep_dic["rewards"][-1])
@@ -142,15 +144,19 @@ class PPOModel:
             for _ in range(self.epochs + epoch_bonus):
                 for i in range(len(ep_dic["observations"])):
                     with tf.GradientTape(persistent=True) as tape:
-                        policy_loss, value_loss = self.ppo_loss(ep_dic, i)
+                        policy_loss = self.ppo_loss(ep_dic, i)
                     #print("VALUE LOSS: ", value_loss)
                     grads = tape.gradient(policy_loss, self.actor.trainable_variables)
                     #print("GRADS: ", grads)
                     self.optimizer.apply_gradients(zip(grads, self.actor.trainable_variables))
-                    grads = tape.gradient(value_loss, self.critic.trainable_variables)
+                    #grads = tape.gradient(value_loss, self.critic.trainable_variables)
                     #print("GRADS: ", grads)
-                    self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
+                    #self.optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
                     del tape
+            
+            observ_arr = np.array(ep_dic["observations"])
+            observ_arr = np.reshape(observ_arr, (observ_arr.shape[0], observ_arr.shape[2]))
+            self.critic.fit(observ_arr, ep_dic["tdlamret"], batch_size=32, epochs=2)
             self.training_info["episode"] += 1
             self.save_models()
             print("Done Training")
@@ -181,12 +187,10 @@ class PPOModel:
         policy_surrogate = - tf.reduce_mean(tf.minimum(surrogate_1, surrogate_2))
         #value_fn_loss = tf.reduce_mean(tf.square(ep_dic["tdlamret"][index] - cur_val))
         
-        value_fn_loss = tf.reduce_mean(tf.square(ep_dic["returns"][index] - cur_val))
-        #print("CUR VAL: ", cur_val)
-        #print(ep_dic["returns"][index] - cur_val)
-        #print("VALUE LOSS: ", value_fn_loss)
+        #value_fn_loss = tf.reduce_mean(tf.square(tf.convert_to_tensor(ep_dic["returns"][index]) - cur_val[0][0]))
+
         total_loss = policy_surrogate + policy_entropy_pen 
-        return total_loss, value_fn_loss
+        return total_loss#, value_fn_loss
     
     def save_models(self):
         if self.use_conv:

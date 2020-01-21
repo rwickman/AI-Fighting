@@ -18,9 +18,9 @@ class AgentWorker:
             self.set_should_explore(conn)
             while True:
                 ep_dic = self.run_episode(conn)
-                #self.ppo_model.add_vtarg_and_adv(ep_dic)
+                self.ppo_model.add_vtarg_and_adv(ep_dic)
     
-                self.ppo_model.add_ret_and_adv(ep_dic)
+                #self.ppo_model.add_ret_and_adv(ep_dic)
                 global_actor_weights, global_critic_weights = self.ppo_model.train(ep_dic)
                 self.local_actor.set_weights(global_actor_weights)
                 self.local_critic.set_weights(global_critic_weights)
