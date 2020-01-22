@@ -1,6 +1,6 @@
 "Based on https://github.com/openai/baselines/blob/master/baselines/ppo1/pposgd_simple.py"
 
-import random, threading, json
+import random, threading, json, datetime
 import tensorflow as tf
 import numpy as np
 from normal_distribution import NormalDistribution
@@ -42,6 +42,7 @@ class PPOModel:
             clip_param=0.1,
             epochs=5,
             batch_size=32,
+            learning_rate=1e-4,
             use_conv = False):
         self.training_json = "model_weights/training.json"
         self.num_states = num_states
@@ -50,7 +51,7 @@ class PPOModel:
         self.hidden_size = hidden_size
         self.batch_size=batch_size
         self.num_hidden_layers = num_hidden_layers
-        self.lose_rate = 1e-4
+        self.learning_rate = learning_rate
         self.epsilon_clip = ep_clip
         global epsilon_clip
         epsilon_clip = ep_clip
@@ -66,6 +67,7 @@ class PPOModel:
         self.dummy_value=np.zeros((1, 1))
         global var
         var = 0.6
+        self.create_summary_writers()
         
     def build_actor_and_critic(self):
         self.build_actor()
@@ -74,7 +76,7 @@ class PPOModel:
             self.load_model_weights()
         else:
             self.training_info = {"episode" : 0}
-        self.optimizer = tf.keras.optimizers.Adam()
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
 
     def build_actor(self):
         inputs = tf.keras.Input(shape=(self.num_states,))
@@ -86,7 +88,7 @@ class PPOModel:
             x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
         out_actor = tf.keras.layers.Dense(self.num_actions, kernel_initializer=tf.random_normal_initializer())(x)
         self.actor = tf.keras.models.Model(inputs=[inputs, advantage, old_pred], outputs=[out_actor])
-        self.actor.compile(optimizer=tf.keras.optimizers.Adam(),
+        self.actor.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
                 loss=[ppo_loss_continuous(
                     advantage=advantage,
                     old_pred=old_pred)],
@@ -100,7 +102,7 @@ class PPOModel:
             x = tf.keras.layers.Dense(self.hidden_size, activation="relu")(x)
         out_critic = tf.keras.layers.Dense(1, kernel_initializer=tf.random_normal_initializer())(x)
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
-        self.critic.compile(optimizer=tf.keras.optimizers.Adam(), loss="mse")
+        self.critic.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate), loss="mse")
         self.critic.summary()
 
     def build_actor_conv(self):
@@ -117,7 +119,15 @@ class PPOModel:
         out_critic = tf.keras.layers.Dense(1, activation="linear", kernel_initializer=tf.random_normal_initializer())(x)
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
 
-
+    def create_summary_writers(self):
+        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        actor_log_dir= "logs/fit/" + current_time + "/actor"
+        critic_log_dir= "logs/fit/" + current_time + "/critic"
+        returns_log_dir= "logs/fit/" + current_time + "/returns"
+        self.actor_summary_writer = tf.summary.create_file_writer(actor_log_dir)
+        self.critic_summary_writer = tf.summary.create_file_writer(critic_log_dir)
+        self.returns_summary_writer = tf.summary.create_file_writer(returns_log_dir) 
+    
     def next_action_and_value(self, observ):
         self.distribution.mean = self.actor(observ)
         return self.distribution.sample(), self.critic([observ, self.dummy_action, self.dummy_value])
@@ -166,8 +176,29 @@ class PPOModel:
             ep_dic["adv"] = np.reshape(ep_dic["adv"], (ep_dic["adv"].shape[0], 1))
             ep_dic["means"] = np.array([mean.numpy()[0] for mean in ep_dic["means"]])
             ep_dic["actions"] = np.array([action.numpy()[0] for action in ep_dic["actions"]])
-            self.actor.fit([observ_arr, ep_dic["adv"], ep_dic["means"]], ep_dic["actions"], batch_size=self.batch_size, epochs=self.epochs, shuffle=True)
-            self.critic.fit(observ_arr, ep_dic["tdlamret"], batch_size=self.batch_size, epochs=self.epochs, shuffle=True)
+           
+            actor_history = self.actor.fit(
+                    [observ_arr, ep_dic["adv"], ep_dic["means"]],
+                    [ep_dic["actions"]],
+                    batch_size=self.batch_size,
+                    epochs=self.epochs,
+                    shuffle=True)
+            critic_history = self.critic.fit(
+                    observ_arr,
+                    [ep_dic["tdlamret"]],
+                    batch_size=self.batch_size,
+                    epochs=self.epochs,
+                    shuffle=True)
+            
+            with self.actor_summary_writer.as_default():
+                tf.summary.scalar("loss", actor_history.history["loss"][-1], step=self.training_info["episode"])
+            
+            with self.critic_summary_writer.as_default():
+                tf.summary.scalar("loss", critic_history.history["loss"][-1], step=self.training_info["episode"])
+            
+            with self.returns_summary_writer.as_default():
+                tf.summary.scalar("Return", ep_dic["episode_return"], step=self.training_info["episode"])
+
             self.training_info["episode"] += 1
             self.save_model_weights()
             print("Done Training")
@@ -221,7 +252,7 @@ class PPOModel:
         else:
             self.actor = tf.keras.models.load_model("actor_model.h5")
             self.critic = tf.keras.models.load_model("critic_model.h5")
-        self.optimizer = tf.keras.optimizers.Adam()
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
         self.actor.summary()
         self.critic.summary()
 
@@ -239,7 +270,6 @@ class PPOModel:
         print("LOADING MODEL")
         self.actor.load_weights("model_weights/actor_model")
         self.critic.load_weights("model_weights/critic_model")
-        self.optimizer = tf.keras.optimizers.Adam()
         
         with open(self.training_json, "r") as f:
             self.training_info = json.load(f)

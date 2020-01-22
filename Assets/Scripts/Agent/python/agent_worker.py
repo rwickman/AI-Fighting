@@ -60,7 +60,7 @@ class AgentWorker:
             #print(env_dic["reward"])
             action, val = self.next_action_and_value(state_arr)
             actions.append(action)
-            #print(action)
+            #print("ACTION: ",  action)
             action = action.numpy()[0]
             # print("action: ", action)
             #print("value:", val)
