@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyTag: Enemy
-  maxTimeSteps: 600
+  maxTimeSteps: 450
   curTimeStep: 0
   isEpisodeOver: 0
   shouldRestart: 0
@@ -58,6 +58,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4021256138892306853}
     m_Modifications:
+    - target: {fileID: 31093661, guid: 90b0d202183db6ac3bf5fbf14416d2b5, type: 3}
+      propertyPath: numRaycast
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 681691306659291627, guid: 90b0d202183db6ac3bf5fbf14416d2b5,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -158,17 +158,16 @@ class PPOModel:
             print("tdlamret: ", ep_dic["tdlamret"])
             print("Values: ", ep_dic["values"])
             epoch_bonus = 0#5 if ep_dic["rewards"][-1] > 0 else 0 
-            print("BONUS: ", epoch_bonus, " REWARD: ", ep_dic["rewards"][-1])
-            self.shuffle_ep_dic(ep_dic)
+            print("REWARD: ", ep_dic["rewards"][-1])
+            #self.shuffle_ep_dic(ep_dic)
             
             observ_arr = np.array(ep_dic["observations"])
             observ_arr = np.reshape(observ_arr, (observ_arr.shape[0], observ_arr.shape[2]))
             ep_dic["adv"] = np.reshape(ep_dic["adv"], (ep_dic["adv"].shape[0], 1))
             ep_dic["means"] = np.array([mean.numpy()[0] for mean in ep_dic["means"]])
             ep_dic["actions"] = np.array([action.numpy()[0] for action in ep_dic["actions"]])
-
-            self.actor.fit([observ_arr, ep_dic["adv"], ep_dic["means"]], ep_dic["actions"], batch_size=self.batch_size, epochs=self.epochs)
-            self.critic.fit(observ_arr, ep_dic["tdlamret"], batch_size=self.batch_size, epochs=self.epochs)
+            self.actor.fit([observ_arr, ep_dic["adv"], ep_dic["means"]], ep_dic["actions"], batch_size=self.batch_size, epochs=self.epochs, shuffle=True)
+            self.critic.fit(observ_arr, ep_dic["tdlamret"], batch_size=self.batch_size, epochs=self.epochs, shuffle=True)
             self.training_info["episode"] += 1
             self.save_model_weights()
             print("Done Training")
@@ -237,6 +236,7 @@ class PPOModel:
 
 
     def load_model_weights(self):
+        print("LOADING MODEL")
         self.actor.load_weights("model_weights/actor_model")
         self.critic.load_weights("model_weights/critic_model")
         self.optimizer = tf.keras.optimizers.Adam()

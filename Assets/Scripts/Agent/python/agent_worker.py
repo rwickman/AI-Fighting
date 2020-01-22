@@ -31,7 +31,6 @@ class AgentWorker:
 
 
     def run_episode(self, conn):
-        # TODO: Tell the game to start a new episode
         observs = []
         rewards = []
         val_preds = []

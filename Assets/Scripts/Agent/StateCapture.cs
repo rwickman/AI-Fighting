@@ -129,6 +129,7 @@ public class StateCapture : MonoBehaviour
                 RaycastSubState(dir);
             }
         }
+        RaycastSubState(transform.forward);
         //print("TOTAL: " + stateFeatures.Count);
     }
 

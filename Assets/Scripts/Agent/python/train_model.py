@@ -12,7 +12,7 @@ class TrainModel:
     def __init__(self ,args):
         self.num_actions = 6
         # TODO: Dynamically set the number of states and actions
-        self.ppo_model = PPOModel(num_states=args.num_states, should_load_model=args.load_models, num_actions=self.num_actions, epochs=args.epochs, use_conv=args.use_conv)
+        self.ppo_model = PPOModel(num_states=args.num_states, should_load_models=args.load_models, num_actions=self.num_actions, epochs=args.epochs, use_conv=args.use_conv)
         #self.ppo_model.build_actor_and_critic()
         self.header_len = 8
         self.port = 12001
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--load_models", action="store_true",
         help="Load the saved models.")
-    parser.add_argument("--epochs", type=int, default=1,
+    parser.add_argument("--epochs", type=int, default=5,
         help="Number of epochs to train on each episode.")
     parser.add_argument("--use_conv", action="store_true",
         help="Use CNN architecture.")
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         help="Number of hidden units in hidden layers.")
     parser.add_argument("--hidden_layers", type=int, default=2,
         help="Number of hidden_layers.")
-    parser.add_argument("--num_states", type=int, default=2109,
+    parser.add_argument("--num_states", type=int, default=558,
         help="Number of states for input size.")
     args = parser.parse_args()
     main(args)
