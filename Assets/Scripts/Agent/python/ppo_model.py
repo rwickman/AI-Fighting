@@ -16,8 +16,8 @@ def ppo_loss_continuous(advantage, old_pred):
             # y_pred is new means predictions
             # old_pred is old mean predictions
             n = old_pred.shape[1]
-            new_logp = - n/2 * K.log(2*np.pi) - (1/(2 * var)) * K.sum(K.square(y_true - y_pred), axis=-1)
-            old_logp = - n/2 * K.log(2*np.pi) - (1/(2 * var)) * K.sum(K.square(y_true - old_pred), axis=-1)
+            new_logp = - n/2 * K.log(2*np.pi*var) - (1/(2 * var)) * K.sum(K.square(y_true - y_pred), axis=-1)
+            old_logp = - n/2 * K.log(2*np.pi*var) - (1/(2 * var)) * K.sum(K.square(y_true - old_pred), axis=-1)
 
             ratio = K.exp(new_logp - old_logp)
             surrogate_1 = ratio * advantage
