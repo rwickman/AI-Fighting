@@ -7,8 +7,8 @@ from normal_distribution import NormalDistribution
 from keras import backend as K
 
 
-var = 0.6
-epsilon_clip = 0.1
+var = 3
+epsilon_clip = 0.2
 
 def ppo_loss_continuous(advantage, old_pred):
         def loss(y_true, y_pred):
@@ -35,7 +35,7 @@ class PPOModel:
             should_load_models=False,
             hidden_size=64,
             num_hidden_layers = 2,
-            ep_clip=0.1,
+            ep_clip=0.2,
             gamma=0.99,
             lam=0.95,
             entropy_coeff=0.0,
@@ -65,8 +65,6 @@ class PPOModel:
         self.train_lock = threading.Lock()
         self.dummy_action=np.zeros((1,self.num_actions))
         self.dummy_value=np.zeros((1, 1))
-        global var
-        var = 0.6
         self.create_summary_writers()
         
     def build_actor_and_critic(self):

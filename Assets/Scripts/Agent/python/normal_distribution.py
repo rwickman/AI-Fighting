@@ -3,10 +3,10 @@ import numpy as np
 import tensorflow as tf
 
 class NormalDistribution:
-    def __init__(self, num_actions=6, mean=None):
+    def __init__(self, num_actions=6, mean=None, var=3):
         self.mean = mean
-        self.logstd = tf.Variable([[0.6] * num_actions])
-        self.std = tf.exp(self.logstd)
+        self.std = tf.sqrt(var)
+        self.logstd = tf.Variable([tf.log(self.std)] * num_actions])
 
 
     def logp(self, x):
