@@ -5,8 +5,9 @@ import tensorflow as tf
 class NormalDistribution:
     def __init__(self, num_actions=6, mean=None, var=3):
         self.mean = mean
-        self.std = tf.sqrt(var)
-        self.logstd = tf.Variable([tf.log(self.std)] * num_actions])
+        self.var = tf.cast(var, tf.float32)
+        self.std = tf.sqrt(self.var)
+        self.logstd = tf.Variable([[tf.math.log(self.std)] * num_actions])
 
 
     def logp(self, x):

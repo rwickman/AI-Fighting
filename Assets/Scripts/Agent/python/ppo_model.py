@@ -41,7 +41,7 @@ class PPOModel:
             entropy_coeff=0.0,
             clip_param=0.1,
             epochs=5,
-            batch_size=32,
+            batch_size=16,
             learning_rate=1e-4,
             use_conv = False):
         self.training_json = "model_weights/training.json"
