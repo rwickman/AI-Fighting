@@ -55,7 +55,7 @@ public class Agent : MonoBehaviour
     {
         this.actionDic = actionDic;
         actionPerformed = false;
-        Debug.Log("ATTACK: " + actionDic["attack"]);
+        //Debug.Log("ATTACK: " + actionDic["attack"]);
         
         // foreach (KeyValuePair<string, float> kvp in actionDic)
         // {
