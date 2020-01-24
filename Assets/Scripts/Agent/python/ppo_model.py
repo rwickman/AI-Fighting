@@ -39,7 +39,6 @@ class PPOModel:
             gamma=0.99,
             lam=0.95,
             entropy_coeff=0.0,
-            clip_param=0.1,
             epochs=5,
             batch_size=16,
             learning_rate=1e-4,
@@ -162,13 +161,15 @@ class PPOModel:
         self.add_vtarg_and_adv(ep_dic)
         with self.train_lock:
             print("Training")
-            print("Rewards: ", ep_dic["rewards"])
-            print("tdlamret: ", ep_dic["tdlamret"])
-            print("Values: ", ep_dic["values"])
-            epoch_bonus = 0#5 if ep_dic["rewards"][-1] > 0 else 0 
-            print("REWARD: ", ep_dic["rewards"][-1])
-            #self.shuffle_ep_dic(ep_dic)
+            #print("Rewards: ", ep_dic["rewards"])
             
+            #print("tdlamret: ", ep_dic["tdlamret"])
+            #print("Values: ", ep_dic["values"])
+            epoch_bonus = 0#5 if ep_dic["rewards"][-1] > 0 else 0 
+            
+            #print("REWARD: ", ep_dic["rewards"][-1])
+            #self.shuffle_ep_dic(ep_dic)
+            print("Episode Return: ", ep_dic["episode_return"])
             observ_arr = np.array(ep_dic["observations"])
             observ_arr = np.reshape(observ_arr, (observ_arr.shape[0], observ_arr.shape[2]))
             ep_dic["adv"] = np.reshape(ep_dic["adv"], (ep_dic["adv"].shape[0], 1))

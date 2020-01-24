@@ -38,7 +38,6 @@ class AgentWorker:
         means = []
         #prev_acts = []
         ep_ret = 0
-        ep_len = 0
         while True:
             # Read the packet header
             data_header = conn.recv(self.header_len)
@@ -55,7 +54,6 @@ class AgentWorker:
             observs.append(state_arr)
             rewards.append(env_dic["reward"])
             ep_ret += env_dic["reward"]
-            ep_len += 1
             
             #print(env_dic["reward"])
             action, val = self.next_action_and_value(state_arr)
@@ -78,7 +76,6 @@ class AgentWorker:
                     "actions" : actions,
                     "means" : means,
                     "episode_return" : ep_ret,
-                    "episode_length" : ep_len,
                     }
             else:
                 # Send next action
