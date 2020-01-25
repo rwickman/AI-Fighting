@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 class NormalDistribution:
-    def __init__(self, num_actions=6, mean=None, var=3):
+    def __init__(self, num_actions=6, mean=None, var=1):
         self.mean = mean
         self.var = tf.cast(var, tf.float32)
         self.std = tf.sqrt(self.var)

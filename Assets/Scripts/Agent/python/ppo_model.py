@@ -7,7 +7,7 @@ from normal_distribution import NormalDistribution
 from keras import backend as K
 
 
-var = 3
+var = 1
 epsilon_clip = 0.2
 
 def ppo_loss_continuous(advantage, old_pred):
@@ -41,7 +41,7 @@ class PPOModel:
             entropy_coeff=0.0,
             epochs=5,
             batch_size=16,
-            learning_rate=1e-4,
+            learning_rate=3e-4,
             use_conv = False):
         self.training_json = "model_weights/training.json"
         self.num_states = num_states
@@ -54,7 +54,7 @@ class PPOModel:
         self.epsilon_clip = ep_clip
         global epsilon_clip
         epsilon_clip = ep_clip
-        self.distribution = NormalDistribution(num_actions=num_actions)
+        self.distribution = NormalDistribution(num_actions=num_actions, var=var)
         self.use_conv = use_conv
         self.build_actor_and_critic()
         self.gamma = gamma
