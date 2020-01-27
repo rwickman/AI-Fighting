@@ -52,7 +52,7 @@ public class PolicyConnection : MonoBehaviour
         // Establish the remote endpoint for the socket.
         IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
         IPAddress ipAddress = ipHostInfo.AddressList[0];
-        Debug.Log(ipAddress);
+        //Debug.Log(ipAddress);
         IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
         // Create a TCP/IP socket.  
@@ -78,7 +78,7 @@ public class PolicyConnection : MonoBehaviour
 
     public void SendExplorationSetting(string jsonStr)
     {
-        Debug.Log("SendExplorationSetting");
+        //Debug.Log("SendExplorationSetting");
         byte[] byteData = new byte[headerLength + Encoding.ASCII.GetByteCount(jsonStr)];
         Encoding.ASCII.GetBytes(jsonStr.Length.ToString()).CopyTo(byteData, 0);
         Encoding.ASCII.GetBytes(jsonStr).CopyTo(byteData, headerLength);
@@ -88,7 +88,7 @@ public class PolicyConnection : MonoBehaviour
 
     private void SendExplorationSettingCallback(IAsyncResult ar)
     {
-        Debug.Log("SendExplorationSettingCallback");
+        //Debug.Log("SendExplorationSettingCallback");
         client.EndSend(ar);
         resetSendStateCallback();
     }
@@ -147,7 +147,7 @@ public class PolicyConnection : MonoBehaviour
  
     private void ReceiveEnd()
     {
-        Debug.Log("RECEIVE END");
+        //Debug.Log("RECEIVE END");
         // Create the state object.  
         StateObject state = new StateObject();
         state.buffer = new byte[headerLength];
@@ -170,7 +170,7 @@ public class PolicyConnection : MonoBehaviour
     private void ReceiveEndCallback(IAsyncResult ar)
     {
         StateObject state = (StateObject)ar.AsyncState;
-        Debug.Log("ReceiveEndCallback: " + Encoding.ASCII.GetString(state.buffer));
+        //Debug.Log("ReceiveEndCallback: " + Encoding.ASCII.GetString(state.buffer));
         client.EndReceive(ar);
         agentManager.shouldRestart = true;
     }

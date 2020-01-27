@@ -188,6 +188,7 @@ MonoBehaviour:
   shouldSendState: 1
   sentEpisodeOver: 0
   showDebugRays: 0
+  shouldExplore: 1
 --- !u!114 &31093662
 MonoBehaviour:
   m_ObjectHideFlags: 0
