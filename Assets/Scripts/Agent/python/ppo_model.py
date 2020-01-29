@@ -80,9 +80,9 @@ class PPOModel:
         advantage = tf.keras.Input(shape=(1,))
         old_pred = tf.keras.Input(shape=(self.num_actions,))
 
-        x = tf.keras.layers.Dense(self.hidden_size, activation="tanh", kernel_initializer=tf.random_normal_initializer())(inputs)
+        x = tf.keras.layers.Dense(self.hidden_size, activation="relu", kernel_initializer=tf.random_normal_initializer())(inputs)
         for _ in range(self.num_hidden_layers - 1):
-            x = tf.keras.layers.Dense(self.hidden_size, activation="tanh", kernel_initializer=tf.random_normal_initializer())(x)
+            x = tf.keras.layers.Dense(self.hidden_size, activation="relu", kernel_initializer=tf.random_normal_initializer())(x)
         out_actor = tf.keras.layers.Dense(self.num_actions, kernel_initializer=tf.random_normal_initializer())(x)
         self.actor = tf.keras.models.Model(inputs=[inputs, advantage, old_pred], outputs=[out_actor])
         self.actor.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
@@ -94,9 +94,9 @@ class PPOModel:
 
     def build_critic(self):
         inputs = tf.keras.Input(shape=(self.num_states,))
-        x = tf.keras.layers.Dense(self.hidden_size, activation="tanh", kernel_initializer=tf.random_normal_initializer())(inputs)
+        x = tf.keras.layers.Dense(self.hidden_size, activation="relu", kernel_initializer=tf.random_normal_initializer())(inputs)
         for _ in range(self.num_hidden_layers - 1):
-            x = tf.keras.layers.Dense(self.hidden_size, activation="tanh", kernel_initializer=tf.random_normal_initializer())(x)
+            x = tf.keras.layers.Dense(self.hidden_size, activation="relu", kernel_initializer=tf.random_normal_initializer())(x)
         out_critic = tf.keras.layers.Dense(1, kernel_initializer=tf.random_normal_initializer())(x)
         self.critic = tf.keras.models.Model(inputs=[inputs], outputs=[out_critic])
         self.critic.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate), loss="mse")
