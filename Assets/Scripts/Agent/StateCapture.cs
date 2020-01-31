@@ -13,6 +13,7 @@ public class StateCapture : MonoBehaviour
     public bool sentEpisodeOver = false;
     public bool showDebugRays = false;    
     public bool shouldExplore = true;
+    public Transform environment;
     private bool hasStarted = false;
     private bool sentExplorationSetting = false;
     private const int numSubFeatures = 9;
@@ -178,9 +179,12 @@ public class StateCapture : MonoBehaviour
 
     void AddAgentState()
     {
-        stateFeatures.Add(transform.position.x);
-        stateFeatures.Add(transform.position.y);
-        stateFeatures.Add(transform.position.z);
+        Vector3 relativeEnvPos = environment.InverseTransformPoint(transform.position);
+        
+        //print(transform.position + " " + environment.name);
+        stateFeatures.Add(relativeEnvPos.x);
+        stateFeatures.Add(relativeEnvPos.y);
+        stateFeatures.Add(relativeEnvPos.z);
         //print("ROT X: " + transform.eulerAngles.x + " ROT Y: " + transform.eulerAngles.y + " ROT Z: " + transform.eulerAngles.z);
         stateFeatures.Add(transform.eulerAngles.x);
         stateFeatures.Add(transform.eulerAngles.y);
@@ -206,14 +210,15 @@ public class StateCapture : MonoBehaviour
             // Add zero health to objects that are not humans as they have no health
             stateFeatures.Add(0);
         }
-        stateFeatures.Add(raycastedObject.transform.position.x);
-        stateFeatures.Add(raycastedObject.transform.position.y);
-        stateFeatures.Add(raycastedObject.transform.position.z);
+        Vector3 relativeEnvPos = environment.InverseTransformPoint(raycastedObject.transform.position);
+        stateFeatures.Add(relativeEnvPos.x);
+        stateFeatures.Add(relativeEnvPos.y);
+        stateFeatures.Add(relativeEnvPos.z);
         stateFeatures.Add(raycastedObject.transform.eulerAngles.x);
         stateFeatures.Add(raycastedObject.transform.eulerAngles.y);
         stateFeatures.Add(raycastedObject.transform.eulerAngles.z);
         //stateFeatures.Add(raycastedObject.transform.rotation.w);
-        stateFeatures.Add(Vector3.Distance(transform.position, raycastedObject.transform.position));
+        stateFeatures.Add(Vector3.Distance(environment.InverseTransformPoint(transform.position), relativeEnvPos));
     }
 
     void AddEmptyStateFeatures()
