@@ -7,7 +7,7 @@ from normal_distribution import NormalDistribution
 from keras import backend as K
 
 
-var = 1
+var = 3
 epsilon_clip = 0.2
 
 def ppo_loss_continuous(advantage, old_pred):

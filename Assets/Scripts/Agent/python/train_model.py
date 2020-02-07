@@ -12,7 +12,12 @@ class TrainModel:
     def __init__(self ,args):
         self.num_actions = 6
         # TODO: Dynamically set the number of states and actions
-        self.ppo_model = PPOModel(num_states=args.num_states, should_load_models=args.load_models, num_actions=self.num_actions, epochs=args.epochs, num_hidden_layers=args.hidden_layers)
+        self.ppo_model = PPOModel(num_states=args.num_states,
+                should_load_models=args.load_models,
+                num_actions=self.num_actions,
+                epochs=args.epochs,
+                num_hidden_layers=args.hidden_layers,
+                hidden_size=args.hidden_size)
         #self.ppo_model.build_actor_and_critic()
         self.header_len = 8
         self.port = 12001
